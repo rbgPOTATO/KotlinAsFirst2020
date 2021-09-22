@@ -72,7 +72,15 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = TODO()
+fun digitNumber(n: Int): Int {
+    var count = 0
+    var m = n
+    while (m > 0) {
+        count++
+        m /= 10
+    }
+    return if (n == 0) 1 else count
+}
 
 /**
  * Простая (2 балла)
@@ -80,21 +88,40 @@ fun digitNumber(n: Int): Int = TODO()
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int = if ((n == 1) or (n == 2)) 1 else fib(n - 1) + fib(n - 2)
 
 /**
  * Простая (2 балла)
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
-fun minDivisor(n: Int): Int = TODO()
+fun minDivisor(n: Int): Int {
+    var m = 0
+    for (i in 2..n / 2 + 1) {
+        if (n % i == 0) {
+            m = i
+            break
+        }
+    }
+    m = if (m == 0) n else m
+    return m
+}
 
 /**
  * Простая (2 балла)
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int = TODO()
+fun maxDivisor(n: Int): Int {
+    var m = n
+    for (i in n / 2 + 1 downTo 1) {
+        if (n % i == 0) {
+            m = i
+            break
+        }
+    }
+    return m
+}
 
 /**
  * Простая (2 балла)
@@ -112,7 +139,15 @@ fun maxDivisor(n: Int): Int = TODO()
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int {
+    var n = x
+    var count = 0
+    while (n != 1) {
+        n = if (n % 2 == 0) n / 2 else n * 3 + 1
+        count++
+    }
+    return count
+}
 
 /**
  * Средняя (3 балла)
@@ -120,7 +155,13 @@ fun collatzSteps(x: Int): Int = TODO()
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int = TODO()
+fun lcm(m: Int, n: Int): Int {
+    var a = if (m > n) m else n
+    while ((a % m != 0) or (a % n != 0)) {
+        a += 1
+    }
+    return a
+}
 
 /**
  * Средняя (3 балла)
@@ -192,7 +233,31 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var count = 0
+    for (i in 1..999999) {
+        var x = i * i
+        var cnt = 0
+        var u = x
+        while (u != 0) {
+            cnt++
+            u /= 10
+        }
+        val t = cnt
+        if (count + cnt < n) count += cnt else {
+            while (count + cnt != n) {
+                cnt -= 1
+            }
+            for (j in 1..t - cnt) {
+                x /= 10
+            }
+            x %= 10
+            count = x
+            break
+        }
+    }
+    return count
+}
 
 /**
  * Сложная (5 баллов)
@@ -203,4 +268,35 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var x1: Int
+    var x2 = 1
+    var x3 = 2
+    var count = 3
+    var k: Int
+    if ((n == 1) or (n == 2)) return 1 else if (n == 3) return 2 else {
+        var cnt = 0
+        do {
+            count += cnt
+            cnt = 0
+            x1 = x2
+            x2 = x3
+            x3 = x1 + x2
+            k = x3
+            while (k != 0) {
+                cnt++
+                k /= 10
+            }
+        } while (count + cnt < n)
+        val t = cnt
+        while (count + cnt != n) {
+            cnt--
+        }
+        for (i in 1..t - cnt) {
+            x3 /= 10
+        }
+        count = x3 % 10
+    }
+    return count
+}
+
