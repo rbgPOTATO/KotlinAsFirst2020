@@ -75,11 +75,11 @@ fun digitCountInNumber(n: Int, m: Int): Int =
 fun digitNumber(n: Int): Int {
     var count = 0
     var m = n
-    while (m > 0) {
+    do {
         count++
         m /= 10
-    }
-    return if (n == 0) 1 else count
+    } while (m > 0)
+    return count
 }
 
 /**
@@ -88,7 +88,19 @@ fun digitNumber(n: Int): Int {
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = if ((n == 1) or (n == 2)) 1 else fib(n - 1) + fib(n - 2)
+fun fib(n: Int): Int {
+    var x1: Int
+    var x2 = 0
+    var x3 = 1
+    var cnt = 1
+    while (cnt != n) {
+        cnt++
+        x1 = x2
+        x2 = x3
+        x3 = x1 + x2
+    }
+    return x3
+}
 
 /**
  * Простая (2 балла)
@@ -96,14 +108,13 @@ fun fib(n: Int): Int = if ((n == 1) or (n == 2)) 1 else fib(n - 1) + fib(n - 2)
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var m = 0
-    for (i in 2..n / 2 + 1) {
+    var m = n
+    for (i in 2..sqrt(n.toDouble()).toInt()) {
         if (n % i == 0) {
             m = i
             break
         }
     }
-    m = if (m == 0) n else m
     return m
 }
 
@@ -113,11 +124,15 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var m = n
-    for (i in n / 2 + 1 downTo 1) {
-        if (n % i == 0) {
-            m = i
-            break
+    var m = 1
+    if (n % 2 == 0) {
+        m = n / 2
+    } else {
+        for (i in n / 2 downTo 1) {
+            if (n % i == 0) {
+                m = i
+                break
+            }
         }
     }
     return m
@@ -156,9 +171,9 @@ fun collatzSteps(x: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var a = if (m > n) m else n
-    while ((a % m != 0) or (a % n != 0)) {
-        a += 1
+    var a = if (m > n) m else n // для использования max и min их нужно импортировать дополнительно
+    while ((a % m != 0) || (a % n != 0)) {
+        a += 1 // не знаю, какой можно использовать шаг
     }
     return a
 }
@@ -235,28 +250,28 @@ fun cos(x: Double, eps: Double): Double = TODO()
  */
 fun squareSequenceDigit(n: Int): Int {
     var count = 0
-    for (i in 1..999999) {
-        var x = i * i
-        var cnt = 0
+    var i = 0
+    var x: Int
+    var cnt = 0
+    do {
+        i += 1
+        x = i * i
+        count += cnt
+        cnt = 0
         var u = x
         while (u != 0) {
             cnt++
             u /= 10
         }
-        val t = cnt
-        if (count + cnt < n) count += cnt else {
-            while (count + cnt != n) {
-                cnt -= 1
-            }
-            for (j in 1..t - cnt) {
-                x /= 10
-            }
-            x %= 10
-            count = x
-            break
-        }
+    } while (count + cnt < n)
+    val t = cnt
+    while (count + cnt != n) {
+        cnt--
     }
-    return count
+    for (j in 1..t - cnt) {
+        x /= 10 // Чтобы поделить на 10 ^ (t - cnt), нужно дополнительно импортировать math.pow
+    }
+    return x % 10
 }
 
 /**
@@ -270,33 +285,30 @@ fun squareSequenceDigit(n: Int): Int {
  */
 fun fibSequenceDigit(n: Int): Int {
     var x1: Int
-    var x2 = 1
-    var x3 = 2
-    var count = 3
+    var x2 = 0
+    var x3 = 1
+    var count = 1
+    var cnt = 0
     var k: Int
-    if ((n == 1) or (n == 2)) return 1 else if (n == 3) return 2 else {
-        var cnt = 0
-        do {
-            count += cnt
-            cnt = 0
-            x1 = x2
-            x2 = x3
-            x3 = x1 + x2
-            k = x3
-            while (k != 0) {
-                cnt++
-                k /= 10
-            }
-        } while (count + cnt < n)
-        val t = cnt
-        while (count + cnt != n) {
-            cnt--
+    do {
+        count += cnt
+        cnt = 0
+        x1 = x2
+        x2 = x3
+        x3 = x1 + x2
+        k = x3
+        while (k != 0) {
+            cnt++
+            k /= 10
         }
-        for (i in 1..t - cnt) {
-            x3 /= 10
-        }
-        count = x3 % 10
+    } while (count + cnt < n)
+    val t = cnt
+    while (count + cnt != n) {
+        cnt--
     }
-    return count
+    for (i in 1..t - cnt) {
+        x3 /= 10 // аналогично предыдущей задаче
+    }
+    return if (n == 1) 1 else x3 % 10
 }
 
