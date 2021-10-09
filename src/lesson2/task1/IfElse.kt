@@ -86,7 +86,30 @@ fun timeForHalfWay(
     t1: Double, v1: Double,
     t2: Double, v2: Double,
     t3: Double, v3: Double
-): Double = TODO()
+): Double {
+    val s1: Double = t1 * v1
+    val s2: Double = t2 * v2
+    val s3: Double = t3 * v3
+    val s: Double = s1 + s2 + s3
+    var pol: Double = s / 2
+    val t: Double
+    val v: Double
+    if (s - s3 < pol) {
+        t = t1 + t2
+        v = v3
+        pol -= s1 + s2
+    } else {
+        if (s - s3 - s2 < pol) {
+            t = t1
+            v = v2
+            pol -= s1
+        } else {
+            t = 0.0
+            v = v1
+        }
+    }
+    return t + pol / v
+}
 
 /**
  * Простая (2 балла)
@@ -101,7 +124,12 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int = TODO()
+): Int = when {
+    kingX == rookX1 && kingY == rookY2 || kingX == rookX2 && kingY == rookY1 -> 3
+    kingX == rookX1 || kingY == rookY1 -> 1
+    kingX == rookX2 || kingY == rookY2 -> 2
+    else -> 0
+}
 
 /**
  * Простая (2 балла)
@@ -117,7 +145,13 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int = TODO()
+): Int = when {
+    (kingX == rookX || kingY == rookY) &&
+            (kingX + kingY == bishopX + bishopY || kingX - kingY == bishopX - bishopY) -> 3
+    kingX == rookX || kingY == rookY -> 1
+    kingX + kingY == bishopX + bishopY || kingX - kingY == bishopX - bishopY -> 2
+    else -> 0
+}
 
 /**
  * Простая (2 балла)
@@ -127,7 +161,17 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    val a2 = a * a
+    val b2 = b * b
+    val c2 = c * c
+    return when {
+        a > b + c || b > a + c || c > a + b -> -1
+        a2 + b2 == c2 || a2 + c2 == b2 || b2 + c2 == a2 -> 1
+        a2 + b2 <= c2 || a2 + c2 <= b2 || b2 + c2 <= a2 -> 2
+        else -> 0
+    }
+}
 
 /**
  * Средняя (3 балла)

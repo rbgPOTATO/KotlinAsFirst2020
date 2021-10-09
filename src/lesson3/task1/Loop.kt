@@ -2,7 +2,7 @@
 
 package lesson3.task1
 
-import kotlin.math.sqrt
+import kotlin.math.*
 
 // Урок 3: циклы
 // Максимальное количество баллов = 9
@@ -171,8 +171,8 @@ fun collatzSteps(x: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var a = if (m > n) m else n // для использования max и min их нужно импортировать дополнительно
-    while ((a % m != 0) || (a % n != 0)) {
+    var a = max(m, n)
+    while (a % m != 0 || a % n != 0) {
         a += 1 // не знаю, какой можно использовать шаг
     }
     return a
@@ -185,7 +185,14 @@ fun lcm(m: Int, n: Int): Int {
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean = TODO()
+fun isCoPrime(m: Int, n: Int): Boolean {
+    for (i in 2..min(m, n) / 2) {
+        if (m % i == 0 && n % i == 0) {
+            return false
+        }
+    }
+    return max(m, n) % min(m, n) != 0
+}
 
 /**
  * Средняя (3 балла)
@@ -194,7 +201,23 @@ fun isCoPrime(m: Int, n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var cnt = 0
+    var x = 0
+    var m: Int = n
+    while (m != 0) {
+        cnt++
+        m /= 10
+    }
+    var ten: Int = 10.0.pow(cnt - 1).toInt()
+    m = n
+    while (m != 0) {
+        x += m % 10 * ten
+        ten /= 10
+        m /= 10
+    }
+    return x
+}
 
 /**
  * Средняя (3 балла)
@@ -205,7 +228,23 @@ fun revert(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean {
+    var cnt = 0
+    var x = 0
+    var m: Int = n
+    while (m != 0) {
+        cnt++
+        m /= 10
+    }
+    var ten: Int = 10.0.pow(cnt - 1).toInt()
+    m = n
+    while (m != 0) {
+        x += m % 10 * ten
+        ten /= 10
+        m /= 10
+    }
+    return x == n
+}
 
 /**
  * Средняя (3 балла)
@@ -215,7 +254,15 @@ fun isPalindrome(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var m: Int = n / 10
+    val t: Int = n % 10
+    while (m != 0) {
+        if (t != m % 10) return true
+        m /= 10
+    }
+    return false
+}
 
 /**
  * Средняя (4 балла)
@@ -226,7 +273,17 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
-fun sin(x: Double, eps: Double): Double = TODO()
+fun sin(x: Double, eps: Double): Double {
+    var y: Double = x
+    var sum: Double = x
+    var m = 2.0
+    while (abs(y) >= eps) {
+        y = -y * x * x / (m * (m + 1.0))
+        sum += y
+        m += 2.0
+    }
+    return sum
+}
 
 /**
  * Средняя (4 балла)
@@ -237,7 +294,17 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double {
+    var y = 1.0
+    var sum = 1.0
+    var m = 1.0
+    while (abs(y) >= eps) {
+        y = -y * x * x / (m * (m + 1.0))
+        sum += y
+        m += 2.0
+    }
+    return sum
+}
 
 /**
  * Сложная (4 балла)
@@ -268,9 +335,7 @@ fun squareSequenceDigit(n: Int): Int {
     while (count + cnt != n) {
         cnt--
     }
-    for (j in 1..t - cnt) {
-        x /= 10 // Чтобы поделить на 10 ^ (t - cnt), нужно дополнительно импортировать math.pow
-    }
+    x /= 10.0.pow(t - cnt).toInt()
     return x % 10
 }
 
@@ -306,9 +371,7 @@ fun fibSequenceDigit(n: Int): Int {
     while (count + cnt != n) {
         cnt--
     }
-    for (i in 1..t - cnt) {
-        x3 /= 10 // аналогично предыдущей задаче
-    }
+    x3 /= 10.0.pow(t - cnt).toInt()
     return if (n == 1) 1 else x3 % 10
 }
 
