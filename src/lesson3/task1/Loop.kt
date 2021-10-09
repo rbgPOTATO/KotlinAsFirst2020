@@ -191,7 +191,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
             return false
         }
     }
-    return max(m, n) % min(m, n) != 0
+    return if (m == 1 && n == 1) true else max(m, n) % min(m, n) != 0
 }
 
 /**
@@ -276,9 +276,9 @@ fun hasDifferentDigits(n: Int): Boolean {
 fun sin(x: Double, eps: Double): Double {
     var y: Double = x
     var sum: Double = x
-    var m = 2.0
+    var m = 1.0
     while (abs(y) >= eps) {
-        y = -y * x * x / (m * (m + 1.0))
+        y = -y * x * x / ((m + 1.0) * (m + 2.0))
         sum += y
         m += 2.0
     }
@@ -299,7 +299,7 @@ fun cos(x: Double, eps: Double): Double {
     var sum = 1.0
     var m = 1.0
     while (abs(y) >= eps) {
-        y = -y * x * x / (m * (m + 1.0))
+        y = -y * x * x / ((m + 1.0) * (m + 2.0))
         sum += y
         m += 2.0
     }
