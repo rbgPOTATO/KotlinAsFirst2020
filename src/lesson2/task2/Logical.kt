@@ -24,7 +24,7 @@ fun isNumberHappy(number: Int): Boolean {
     val second = (number / 100) % 10
     val first = number / 1000
     return when {
-     first + second == third + forth -> true
+        first + second == third + forth -> true
         else -> false
     }
 }
@@ -37,11 +37,10 @@ fun isNumberHappy(number: Int): Boolean {
  * Считать, что ферзи не могут загораживать друг друга.
  */
 fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
-    val diagonal = kotlin.math.abs(x2 - x1) == kotlin.math.abs(y2 - y1)
-    val vertical = x1 == x2
-    val horizontal = y1 == y2
-    if (diagonal || vertical || horizontal) return true
-    else return false
+    val d = kotlin.math.abs(x2 - x1) == kotlin.math.abs(y2 - y1)
+    val v = x1 == x2
+    val h = y1 == y2
+    return d || v || h
 }
 
 
@@ -61,8 +60,7 @@ fun daysInMonth(month: Int, year: Int): Int {
             11 -> 30
             else -> 31
         }
-    }
-    else return when (month) {
+    } else return when (month) {
         2 -> 28
         4 -> 30
         6 -> 30

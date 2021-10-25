@@ -158,27 +158,8 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-/*fun triangleKind(a: Double, b: Double, c: Double): Int {
-    if (a > b + c) return when {
-        sqr(a) == sqr(b) + sqr(c) -> 1
-        sqr(a) > sqr(b) + sqr(c) -> 0
-        sqr(a) < sqr(b) + sqr(c) -> 2
-        else -> -1
-    }
-    if (b > a + c) return when {
-        sqr(b) == sqr(a) + sqr(c) -> 1
-        sqr(b) > sqr(a) + sqr(c) -> 0
-        sqr(b) < sqr(a) + sqr(c) -> 2
-        else -> -1
-    }
-    if (c > a + b) return when {
-        sqr(c) == sqr(a) + sqr(b) -> 1
-        sqr(c) > sqr(a) + sqr(b) -> 0
-        sqr(c) < sqr(a) + sqr(b) -> 2
-        else -> -1
-    }
-}
-*/
+fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+
 /**
  * Средняя (3 балла)
  *

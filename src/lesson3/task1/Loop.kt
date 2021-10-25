@@ -2,6 +2,8 @@
 
 package lesson3.task1
 
+import kotlin.math.abs
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 // Урок 3: циклы
@@ -17,7 +19,7 @@ import kotlin.math.sqrt
 fun factorial(n: Int): Double {
     var result = 1.0
     for (i in 1..n) {
-        result = result * i // Please do not fix in master
+        result *= i // Please do not fix in master
     }
     return result
 }
@@ -72,7 +74,15 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = TODO()
+fun digitNumber(n: Int): Int {
+    var count = 0
+    var number = n
+    do {
+        number /= 10
+        count += 1
+    } while (number > 0)
+    return count
+}
 
 /**
  * Простая (2 балла)
@@ -87,14 +97,32 @@ fun fib(n: Int): Int = TODO()
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
-fun minDivisor(n: Int): Int = TODO()
+fun minDivisor(n: Int): Int {
+    var min = 0
+    for (i in 2..n) {
+        if (n % i == 0) {
+            min = i
+            break
+        }
+    }
+    return min
+}
 
 /**
  * Простая (2 балла)
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int = TODO()
+fun maxDivisor(n: Int): Int {
+    var max = 0
+    for (i in n - 1 downTo 1) {
+        if (n % i == 0) {
+            max = i
+            break
+        }
+    }
+    return max
+}
 
 /**
  * Простая (2 балла)
@@ -112,7 +140,20 @@ fun maxDivisor(n: Int): Int = TODO()
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int {
+    var step = 0
+    var num = x
+    while (num != 1) {
+        if (num % 2 == 0) {
+            num /= 2
+            step++
+        } else {
+            num = 3 * num + 1
+            step++
+        }
+    }
+    return step
+}
 
 /**
  * Средняя (3 балла)
@@ -120,7 +161,16 @@ fun collatzSteps(x: Int): Int = TODO()
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int = TODO()
+fun lcm(m: Int, n: Int): Int {
+    var k = 0
+    for (i in 1..n * m) {
+        if (i % n == 0 && i % m == 0) {
+            k = i
+            break
+        }
+    }
+    return k
+}
 
 /**
  * Средняя (3 балла)
@@ -129,7 +179,13 @@ fun lcm(m: Int, n: Int): Int = TODO()
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean = TODO()
+fun isCoPrime(m: Int, n: Int): Boolean {
+    for (i in 2..n + m) {
+        if (m % i == 0 && n % i == 0)
+            return false
+    }
+    return true
+}
 
 /**
  * Средняя (3 балла)
@@ -138,7 +194,15 @@ fun isCoPrime(m: Int, n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var r = 0
+    var num = n
+    while (num != 0) {
+        r = r * 10 + num % 10
+        num /= 10
+    }
+    return r
+}
 
 /**
  * Средняя (3 балла)
@@ -149,7 +213,15 @@ fun revert(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean {
+    var r = 0
+    var num = n
+    while (num != 0) {
+        r = r * 10 + num % 10
+        num /= 10
+    }
+    return r == n
+}
 
 /**
  * Средняя (3 балла)
@@ -170,7 +242,17 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
-fun sin(x: Double, eps: Double): Double = TODO()
+fun sin(x: Double, eps: Double): Double {
+    var n = 2
+    var m = x
+    var s = x
+    while (abs(m) > eps) {
+        m = -m * x.pow(2) / n * (n + 1)
+        s += m
+        n += 2
+    }
+    return s
+}
 
 /**
  * Средняя (4 балла)
