@@ -305,7 +305,7 @@ fun convertToString(n: Int, base: Int): String {
         result.add(0, letters[m % base])
         m /= base
     }
-return result.joinToString(separator = "")
+return if (n == 0) "0" else result.joinToString(separator = "")
 }
 
 /**
@@ -437,7 +437,7 @@ fun russian(n: Int): String {
         s += " тысяч"
     } else {
         s += second[number[1]]
-        if (number[1] != 0 && s != "") s += " "
+        if (number[2] != 0 && s != "") s += " "
         s += firstTh[number[2]]
         s += when {
             number[0] == 0 && number[1] == 0 && number[2] == 0 -> ""
