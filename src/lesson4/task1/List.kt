@@ -277,7 +277,7 @@ fun convert(n: Int, base: Int): List<Int> {
         result.add(0, m % base)
         m /= base
     }
-    return result
+    return if (n == 0) listOf(0) else result
 }
 
 /**
@@ -346,7 +346,7 @@ fun decimalFromString(str: String, base: Int): Int {
         s += number.indexOf(i.toString()) * base.toDouble().pow(str.length - j).toInt()
         j += 1
     }
-    return s
+    return if (str == "0") 0 else s
 }
 
 /**
@@ -432,6 +432,7 @@ fun russian(n: Int): String {
     third.add("девятьсот")
     var s = ""
     s += third[number[0]]
+    if (number[0] != 0) s += " "
     if (number[1] == 1) {
         if (s != "") s += " "
         s += tenToTwenty[number[2]]
