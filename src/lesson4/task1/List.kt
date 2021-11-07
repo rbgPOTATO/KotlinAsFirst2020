@@ -432,12 +432,12 @@ fun russian(n: Int): String {
     third.add("девятьсот")
     var s = ""
     s += third[number[0]]
-    if (number[0] != 0) s += " "
     if (number[1] == 1) {
         if (s != "") s += " "
         s += tenToTwenty[number[2]]
         s += " тысяч"
     } else {
+        if (s != "") s += " "
         s += second[number[1]]
         if (number[1] != 0 && s != "") s += " "
         s += firstTh[number[2]]
