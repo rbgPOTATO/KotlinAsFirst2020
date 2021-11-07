@@ -355,4 +355,96 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    val firstSt = mutableListOf<String>()
+    val firstTh = mutableListOf<String>()
+    val second = mutableListOf<String>()
+    val third = mutableListOf<String>()
+    val tenToTwenty = mutableListOf<String>()
+    val number = mutableListOf<Int>()
+    var m = n
+    while (m > 0) {
+        number.add(0, m % 10)
+        m /= 10
+    }
+    while (number.size < 6) number.add(0, 0)
+    print(number)
+    tenToTwenty.add("десять")
+    tenToTwenty.add("одиннадцать")
+    tenToTwenty.add("двенадцать")
+    tenToTwenty.add("тринадцать")
+    tenToTwenty.add("четырнадцать")
+    tenToTwenty.add("пятнадцать")
+    tenToTwenty.add("шестнадцать")
+    tenToTwenty.add("семнадцать")
+    tenToTwenty.add("восемнадцать")
+    tenToTwenty.add("девятнадцать")
+    firstSt.add("")
+    firstSt.add("один")
+    firstSt.add("два")
+    firstSt.add("три")
+    firstSt.add("четыре")
+    firstSt.add("пять")
+    firstSt.add("шесть")
+    firstSt.add("семь")
+    firstSt.add("восемь")
+    firstSt.add("девять")
+    firstTh.add("")
+    firstTh.add("одна")
+    firstTh.add("две")
+    firstTh.add("три")
+    firstTh.add("четыре")
+    firstTh.add("пять")
+    firstTh.add("шесть")
+    firstTh.add("семь")
+    firstTh.add("восемь")
+    firstTh.add("девять")
+    second.add("")
+    second.add("десять")
+    second.add("двадцать")
+    second.add("тридцать")
+    second.add("сорок")
+    second.add("пятьдесят")
+    second.add("шестьдесят")
+    second.add("семьдесят")
+    second.add("восемьдесят")
+    second.add("девяносто")
+    third.add("")
+    third.add("сто")
+    third.add("двести")
+    third.add("триста")
+    third.add("четыреста")
+    third.add("пятьсот")
+    third.add("шестьсот")
+    third.add("семьсот")
+    third.add("восемьсот")
+    third.add("девятьсот")
+    var s = ""
+    s += third[number[0]]
+    if (number[1] == 1) {
+        if (s != "") s += " "
+        s += tenToTwenty[number[2]]
+        s += " тысяч"
+    } else {
+        s += second[number[1]]
+        if (number[1] != 0 && s != "") s += " "
+        s += firstTh[number[2]]
+        s += when {
+            number[0] == 0 && number[1] == 0 && number[2] == 0 -> ""
+            number[2] == 1 -> " тысяча"
+            number[2] in (2..4) -> " тысячи"
+            else -> " тысяч"
+        }
+    }
+    if (number[3] != 0 && s != "") s += " "
+    s += third[number[3]]
+    if (number[4] != 0 && s != "") s += " "
+    if (number[4] == 1) {
+        s += tenToTwenty[number[5]]
+    } else {
+        s += second[number[4]]
+        if (number[5] != 0 && s != "") s += " "
+        s += firstSt[number[5]]
+    }
+    return s
+}

@@ -3,6 +3,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -68,10 +69,13 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String = when {
-    age % 100 in 5..20 || age % 10 > 4 || age % 10 == 0 -> "$age лет"
-    age % 10 == 1 -> "$age год"
-    else -> "$age года"
+fun ageDescription(age: Int): String {
+    val lastNumb = age % 10
+    return when {
+        age % 100 in 5..20 || lastNumb > 4 || lastNumb == 0 -> "$age лет"
+        lastNumb == 1 -> "$age год"
+        else -> "$age года"
+    }
 }
 
 
@@ -87,23 +91,25 @@ fun timeForHalfWay(
     t2: Double, v2: Double,
     t3: Double, v3: Double
 ): Double {
-    val s1: Double = t1 * v1
-    val s2: Double = t2 * v2
-    val s3: Double = t3 * v3
-    val s: Double = s1 + s2 + s3
-    var pol: Double = s / 2
+    val s1 = t1 * v1
+    val s2 = t2 * v2
+    val s3 = t3 * v3
+    val s = s1 + s2 + s3
+    var pol = s / 2
     val t: Double
     val v: Double
-    if (s - s3 < pol) {
-        t = t1 + t2
-        v = v3
-        pol -= s1 + s2
-    } else {
-        if (s - s3 - s2 < pol) {
+    when {
+        s - s3 < pol -> {
+            t = t1 + t2
+            v = v3
+            pol -= s1 + s2
+        }
+        s - s3 - s2 < pol -> {
             t = t1
             v = v2
             pol -= s1
-        } else {
+        }
+        else -> {
             t = 0.0
             v = v1
         }
@@ -124,11 +130,15 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int = when {
-    kingX == rookX1 && kingY == rookY2 || kingX == rookX2 && kingY == rookY1 -> 3
-    kingX == rookX1 || kingY == rookY1 -> 1
-    kingX == rookX2 || kingY == rookY2 -> 2
-    else -> 0
+): Int {
+    val equalK1 = kingX == rookX1 || kingY == rookY1
+    val equalK2 = kingX == rookX2 || kingY == rookY2
+    return when {
+        equalK1 && equalK2 -> 3
+        equalK2 -> 2
+        equalK1 -> 1
+        else -> 0
+    }
 }
 
 /**
@@ -145,12 +155,15 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int = when {
-    (kingX == rookX || kingY == rookY) &&
-            (kingX + kingY == bishopX + bishopY || kingX - kingY == bishopX - bishopY) -> 3
-    kingX == rookX || kingY == rookY -> 1
-    kingX + kingY == bishopX + bishopY || kingX - kingY == bishopX - bishopY -> 2
-    else -> 0
+): Int {
+    val kingXR = kingX == rookX || kingY == rookY
+    val kingXB = abs(kingX - bishopX) == abs(kingY - bishopY)
+    return when {
+        kingXR && kingXB -> 3
+        kingXB -> 2
+        kingXR -> 1
+        else -> 0
+    }
 }
 
 /**

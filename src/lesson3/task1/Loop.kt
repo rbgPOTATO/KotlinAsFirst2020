@@ -89,17 +89,16 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    var x1: Int
-    var x2 = 0
-    var x3 = 1
+    var x1 = 0
+    var x2 = 1
     var cnt = 1
-    while (cnt != n) {
+    while (cnt < n) {
         cnt++
-        x1 = x2
-        x2 = x3
-        x3 = x1 + x2
+        val k = x2
+        x2 += x1
+        x1 = k
     }
-    return x3
+    return x2
 }
 
 /**
@@ -108,14 +107,10 @@ fun fib(n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var m = n
     for (i in 2..sqrt(n.toDouble()).toInt()) {
-        if (n % i == 0) {
-            m = i
-            break
-        }
+        if (n % i == 0) return i
     }
-    return m
+    return n
 }
 
 /**
@@ -124,18 +119,10 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var m = 1
-    if (n % 2 == 0) {
-        m = n / 2
-    } else {
-        for (i in n / 2 downTo 1) {
-            if (n % i == 0) {
-                m = i
-                break
-            }
-        }
+    for (i in n / 2 downTo 2) {
+        if (n % i == 0) return i
     }
-    return m
+    return 1
 }
 
 /**
@@ -173,7 +160,7 @@ fun collatzSteps(x: Int): Int {
 fun lcm(m: Int, n: Int): Int {
     var a = max(m, n)
     while (a % m != 0 || a % n != 0) {
-        a += 1 // не знаю, какой можно использовать шаг
+        a += 1
     }
     return a
 }
@@ -202,15 +189,10 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun revert(n: Int): Int {
-    var cnt = 0
     var x = 0
-    var m: Int = n
-    while (m != 0) {
-        cnt++
-        m /= 10
-    }
+    val cnt: Int = digitNumber(n)
     var ten: Int = 10.0.pow(cnt - 1).toInt()
-    m = n
+    var m: Int = n
     while (m != 0) {
         x += m % 10 * ten
         ten /= 10
@@ -228,23 +210,7 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean {
-    var cnt = 0
-    var x = 0
-    var m: Int = n
-    while (m != 0) {
-        cnt++
-        m /= 10
-    }
-    var ten: Int = 10.0.pow(cnt - 1).toInt()
-    m = n
-    while (m != 0) {
-        x += m % 10 * ten
-        ten /= 10
-        m /= 10
-    }
-    return x == n
-}
+fun isPalindrome(n: Int): Boolean = revert(n) == n
 
 /**
  * Средняя (3 балла)
@@ -276,13 +242,9 @@ fun hasDifferentDigits(n: Int): Boolean {
 fun sin(x: Double, eps: Double): Double {
     var y: Double = x
     var sum: Double = x
-    var m = 3.0
-    var n = 0.0
-    var fac = 1.0
+    var m = 1.0
     while (abs(y) >= eps) {
-        n++
-        fac *= (m - 1.0) * (m - 2.0)
-        y = (-1.0).pow(n) * x.pow(m) / fac
+        y *= -1.0 * x * x / ((m + 1.0) * (m + 2.0))
         sum += y
         m += 2.0
     }
@@ -336,9 +298,7 @@ fun squareSequenceDigit(n: Int): Int {
         }
     } while (count + cnt < n)
     val t = cnt
-    while (count + cnt != n) {
-        cnt--
-    }
+    cnt = n - count
     x /= 10.0.pow(t - cnt).toInt()
     return x % 10
 }
@@ -353,6 +313,7 @@ fun squareSequenceDigit(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
+    if (n == 1) return 1
     var x1: Int
     var x2 = 0
     var x3 = 1
@@ -372,10 +333,8 @@ fun fibSequenceDigit(n: Int): Int {
         }
     } while (count + cnt < n)
     val t = cnt
-    while (count + cnt != n) {
-        cnt--
-    }
+    cnt = n - count
     x3 /= 10.0.pow(t - cnt).toInt()
-    return if (n == 1) 1 else x3 % 10
+    return x3 % 10
 }
 
