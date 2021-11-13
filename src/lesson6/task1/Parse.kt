@@ -100,7 +100,7 @@ fun dateStrToDigit(str: String): String {
         val x = daysInMonth(parts[1].toInt(), parts[2].toInt())
         if (parts[1].toInt() <= 0 ||
             parts[0].toInt() !in 1..x ||
-            parts[2].toInt() <= 0
+            parts[2].toInt() !in 1..9999
         ) throw IndexOutOfBoundsException()
         for (i in parts) result.add(i.toInt())
         String.format("%02d.%02d.%d", result[0], result[1], result[2])
@@ -146,7 +146,7 @@ fun dateDigitToStr(digital: String): String {
         val x = daysInMonth(parts[1].toInt(), parts[2].toInt())
         if (parts.count() != 3 ||
             parts[0].toInt() !in 1..x ||
-            parts[2].toInt() <= 0 ||
+            parts[2].toInt() !in 0..9999 ||
             month[parts[1].toInt() - 1] == "-1"
         )
             throw IndexOutOfBoundsException()
