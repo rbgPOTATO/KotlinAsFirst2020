@@ -114,9 +114,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     result[3] = names3
     result[4] = names4
     result[5] = names5
-    for (i in 2..5) {
-        if (result[i] == listOf<Int>()) result.remove(i)
-    }
+    for (i in 2..5) if (result[i] == listOf<String>()) result.remove(i)
     return result
 }
 

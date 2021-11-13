@@ -2,6 +2,11 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+import java.lang.NumberFormatException
+import java.text.DateFormat
+import java.util.*
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -74,7 +79,36 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val parts = str.split(" ").toMutableList()
+    val month = mutableListOf<String>()
+    month.add("января")
+    month.add("февраля")
+    month.add("марта")
+    month.add("апреля")
+    month.add("мая")
+    month.add("июня")
+    month.add("июля")
+    month.add("августа")
+    month.add("сентября")
+    month.add("октября")
+    month.add("ноября")
+    month.add("декабря")
+    val result = mutableListOf<Int>()
+    return try {
+        parts[1] = (month.indexOf(parts[1]) + 1).toString()
+        val x = daysInMonth(parts[1].toInt(), parts[2].toInt())
+        if (parts[1].toInt() <= 0 ||
+            parts[0].toInt() !in 1..x ||
+            parts[2].toInt() <= 0
+        ) throw IndexOutOfBoundsException()
+        for (i in parts) result.add(i.toInt())
+        String.format("%02d.%02d.%02d", result[0], result[1], result[2])
+    } catch (e: IndexOutOfBoundsException) {
+        ""
+    }
+
+}
 
 /**
  * Средняя (4 балла)
@@ -86,7 +120,43 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val parts = digital.split(".").toMutableList()
+    try {
+        for (i in 0 until parts.count()) {
+            parts[i] = parts[i].toInt().toString()
+        }
+    } catch (e: NumberFormatException) {
+        return ""
+    }
+    val month = mutableListOf<String>()
+    month.add("января")
+    month.add("февраля")
+    month.add("марта")
+    month.add("апреля")
+    month.add("мая")
+    month.add("июня")
+    month.add("июля")
+    month.add("августа")
+    month.add("сентября")
+    month.add("октября")
+    month.add("ноября")
+    month.add("декабря")
+    return try {
+        print(month[parts[1].toInt() - 1])
+        print(parts[2])
+        val x = daysInMonth(parts[1].toInt(), parts[2].toInt())
+        if (parts.count() != 3 ||
+            parts[0].toInt() !in 1..x ||
+            parts[2].toInt() <= 0 ||
+            month[parts[1].toInt()] == "-1"
+        )
+            throw IndexOutOfBoundsException()
+        String.format("%s %s %s", parts[0], month[parts[1].toInt() - 1], parts[2])
+    } catch (e: IndexOutOfBoundsException) {
+        ""
+    }
+}
 
 /**
  * Средняя (4 балла)
