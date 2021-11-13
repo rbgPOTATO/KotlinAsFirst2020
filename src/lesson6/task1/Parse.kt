@@ -103,7 +103,7 @@ fun dateStrToDigit(str: String): String {
             parts[2].toInt() <= 0
         ) throw IndexOutOfBoundsException()
         for (i in parts) result.add(i.toInt())
-        String.format("%02d.%02d.%02d", result[0], result[1], result[2])
+        String.format("%02d.%02d.%d", result[0], result[1], result[2])
     } catch (e: IndexOutOfBoundsException) {
         ""
     }
@@ -143,13 +143,11 @@ fun dateDigitToStr(digital: String): String {
     month.add("ноября")
     month.add("декабря")
     return try {
-        print(month[parts[1].toInt() - 1])
-        print(parts[2])
         val x = daysInMonth(parts[1].toInt(), parts[2].toInt())
         if (parts.count() != 3 ||
             parts[0].toInt() !in 1..x ||
             parts[2].toInt() <= 0 ||
-            month[parts[1].toInt()] == "-1"
+            month[parts[1].toInt() - 1] == "-1"
         )
             throw IndexOutOfBoundsException()
         String.format("%s %s %s", parts[0], month[parts[1].toInt() - 1], parts[2])
