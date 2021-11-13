@@ -357,7 +357,35 @@ fun decimalFromString(str: String, base: Int): Int {
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    var m = n
+    val chars = mutableMapOf<Int, String>()
+    val sort = mutableListOf<Int>()
+    var result = ""
+    chars[1] = "I"
+    chars[4] = "IV"
+    chars[5] = "V"
+    chars[9] = "IX"
+    chars[10] = "X"
+    chars[40] = "XL"
+    chars[50] = "L"
+    chars[90] = "XC"
+    chars[100] = "C"
+    chars[400] = "CD"
+    chars[500] = "D"
+    chars[900] = "CM"
+    chars[1000] = "M"
+    for (i in chars.keys) {
+        sort.add(0, i)
+    }
+    for (i in sort) {
+        while (m / i > 0) {
+            m -= i
+            result += chars[i]
+        }
+    }
+    return result
+}
 
 /**
  * Очень сложная (7 баллов)
