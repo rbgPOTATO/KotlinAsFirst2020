@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import ru.spbstu.wheels.toMutableMap
+
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -183,7 +185,24 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = TODO()
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
+    var max = 0.0
+    for ((_, value) in stuff) {
+        val coast = value.second
+        if (coast > max) max = coast
+    }
+    var cheap = max
+    var cheapStuff: String? = null
+    for ((name, value) in stuff) {
+        val type = value.first
+        val coast = value.second
+        if ((kind == type) && (cheap > coast)) {
+            cheap = coast
+            cheapStuff = name
+        }
+    }
+    return cheapStuff
+}
 
 /**
  * Средняя (3 балла)
@@ -208,7 +227,24 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
+fun extractRepeats(list: List<String>): Map<String, Int> {
+    val set = mutableSetOf<String>()
+    val map = mutableMapOf<String, Int>()
+    for (i in list) {
+        set += i
+    }
+    for (j in set) {
+        var num = 0
+        for (k in list) {
+            if (j == k) num += 1
+        }
+        if (num != 1) {
+            val pair = Pair(j, num)
+            map += pair
+        }
+    }
+    return map
+}
 
 /**
  * Средняя (3 балла)
