@@ -158,7 +158,7 @@ fun collatzSteps(x: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var j: Int = 1
+    var j = 1
     var a = max(m, n)
     for (i in 2..a) {
         if (a % i == 0) {
@@ -247,11 +247,15 @@ fun hasDifferentDigits(n: Int): Boolean {
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
 fun sin(x: Double, eps: Double): Double {
-    var y: Double = x
-    var sum: Double = x
+    var k = x
+    while (k - 2 * PI >= 0) {
+        k -= 2 * PI
+    }
+    var y: Double = k
+    var sum: Double = k
     var m = 1.0
     while (abs(y) >= eps) {
-        y *= -1.0 * x * x / ((m + 1.0) * (m + 2.0))
+        y *= -1.0 * k * k / ((m + 1.0) * (m + 2.0))
         sum += y
         m += 2.0
     }
@@ -268,11 +272,15 @@ fun sin(x: Double, eps: Double): Double {
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double {
+    var k = x
+    while (k - 2 * PI >= 0) {
+        k -= 2 * PI
+    }
     var y = 1.0
     var sum = 1.0
-    var m = 1.0
+    var m = 0.0
     while (abs(y) >= eps) {
-        y = -y * x * x / ((m + 1.0) * (m + 2.0))
+        y *= -1.0 * k * k / ((m + 1.0) * (m + 2.0))
         sum += y
         m += 2.0
     }

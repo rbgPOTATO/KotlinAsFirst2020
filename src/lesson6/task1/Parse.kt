@@ -4,8 +4,6 @@ package lesson6.task1
 
 import lesson2.task2.daysInMonth
 import java.lang.NumberFormatException
-import java.text.DateFormat
-import java.util.*
 
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
@@ -188,11 +186,11 @@ fun bestLongJump(jumps: String): Int {
     result = result.replace("%", "")
     val m = Regex("""( )+""").replace(result, " ")
     val k = m.split(" ")
-    val resultlist = mutableListOf<Int>()
+    val resultList = mutableListOf<Int>()
     try {
-        for (i in k) resultlist.add(i.toInt())
+        for (i in k) resultList.add(i.toInt())
         var s = 0
-        for (i in resultlist) if (i > s) s = i
+        for (i in resultList) if (i > s) s = i
         return s
     } catch (e: NumberFormatException) {
     }
@@ -216,12 +214,12 @@ fun bestHighJump(jumps: String): Int {
     result = result.replace("-", "")
     result = Regex("""[0-9]{3} (?![+\w])""").replace(result, "")
     result = result.replace(" ", "")
-    val resultlist = mutableListOf<Int>()
+    val resultList = mutableListOf<Int>()
     val m = Regex("""[+]""").split(result)
     try {
-        for (i in m) if (i != "") resultlist.add(i.toInt())
+        for (i in m) if (i != "") resultList.add(i.toInt())
         var s = 0
-        for (i in resultlist) if (i > s) s = i
+        for (i in resultList) if (i > s) s = i
         return s
     } catch (e: NumberFormatException) {
     }
