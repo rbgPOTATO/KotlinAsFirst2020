@@ -248,9 +248,11 @@ fun hasDifferentDigits(n: Int): Boolean {
  */
 fun sin(x: Double, eps: Double): Double {
     var k = x
-    while (k - 2 * PI >= 0) {
-        k -= 2 * PI
+    var i = 0
+    while (k - 2 * PI * i >= 0) {
+        i += 1
     }
+    k -= 2 * PI * i
     var y: Double = k
     var sum: Double = k
     var m = 1.0
@@ -273,9 +275,11 @@ fun sin(x: Double, eps: Double): Double {
  */
 fun cos(x: Double, eps: Double): Double {
     var k = x
-    while (k - 2 * PI >= 0) {
-        k -= 2 * PI
+    var i = 0
+    while (k - 2 * PI * i >= 0) {
+        i += 1
     }
+    k -= 2 * PI * i
     var y = 1.0
     var sum = 1.0
     var m = 0.0
