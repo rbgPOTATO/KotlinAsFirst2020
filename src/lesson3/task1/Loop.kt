@@ -161,7 +161,7 @@ fun lcm(m: Int, n: Int): Int {
     var j = 1
     var a = max(m, n)
     for (i in 2..a) {
-        if (a % i == 0) {
+        if (a % i == 0 && min(m, n) % i == 0) {
             j = i
             break
         }
@@ -248,18 +248,18 @@ fun hasDifferentDigits(n: Int): Boolean {
  */
 fun sin(x: Double, eps: Double): Double {
     var k = x
-    var i = 0
-    while (k - 2 * PI * i >= 0) {
-        i += 1
+    var i = 0.0
+    while (k - 2.0 * PI * i >= 0.0) {
+        i += 1.0
     }
-    k -= 2 * PI * i
+    k -= 2.0 * PI * i
     var y = k
     var sum = k
-    var m = 1
+    var m = 1.0
     while (abs(y) >= eps) {
-        y *= -1 * k * k / ((m + 1) * (m + 2))
+        y *= -1.0 * k * k / ((m + 1.0) * (m + 2.0))
         sum += y
-        m += 2
+        m += 2.0
     }
     return sum
 }
