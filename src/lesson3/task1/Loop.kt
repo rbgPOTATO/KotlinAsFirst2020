@@ -253,13 +253,13 @@ fun sin(x: Double, eps: Double): Double {
         i += 1
     }
     k -= 2 * PI * i
-    var y: Double = k
-    var sum: Double = k
-    var m = 1.0
+    var y = k
+    var sum = k
+    var m = 1
     while (abs(y) >= eps) {
-        y *= -1.0 * k * k / ((m + 1.0) * (m + 2.0))
+        y *= -1 * k * k / ((m + 1) * (m + 2))
         sum += y
-        m += 2.0
+        m += 2
     }
     return sum
 }
