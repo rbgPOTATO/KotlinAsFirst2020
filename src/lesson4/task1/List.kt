@@ -3,6 +3,7 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 // Урок 4: списки
@@ -120,7 +121,14 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = TODO()
+fun abs(v: List<Double>): Double {
+    var result = 0.0
+    for (i in v.indices) {
+        result += v[i] * v[i]
+    }
+    result = sqrt(result)
+    return result
+}
 
 /**
  * Простая (2 балла)
@@ -156,7 +164,15 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int = TODO()
+fun times(a: List<Int>, b: List<Int>): Int {
+    var result = 0
+    for (i in a.indices) {
+        val sum = a[i] * b[i]
+        result += sum
+    }
+    return result
+
+}
 
 /**
  * Средняя (3 балла)
@@ -204,21 +220,7 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> {
-    var mul = 0
-    var list = listOf<Int>()
-    for (i in 2..n / 2) {
-        if (n % i == 0) {
-            for (j in 2..i / 2) {
-                if (i % j != 0)
-                    mul = i
-                list = list.plus(mul)
-            }
-        }
-    }
-    list.sorted()
-    return list
-}
+fun factorize(n: Int): List<Int> = TODO()
 
 /**
  * Сложная (4 балла)
@@ -227,24 +229,7 @@ fun factorize(n: Int): List<Int> {
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String {
-    val list = mutableListOf<Int>()
-    if (n > 1) {
-        for (i in 2 until n / 2) {
-            if ((n % i == 0) && (i > 2)) {
-                for (j in 2 until i / 2) {
-                    if (i % j != 0) {
-                        list += i
-                    }
-                }
-            }
-            if ((n % i == 0) && (i == 2)) {
-                list += i
-            }
-        }
-    }
-    return list.sorted().toString()
-}
+fun factorizeToString(n: Int): String = TODO()
 
 /**
  * Средняя (3 балла)
@@ -253,7 +238,17 @@ fun factorizeToString(n: Int): String {
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = TODO()
+fun convert(n: Int, base: Int): List<Int> {
+    var num = n
+    var k = 0
+    val list = mutableListOf<Int>()
+    while (num > 0) {
+        k = num % base
+        list += k
+        num /= base
+    }
+    return list.reversed()
+}
 
 /**
  * Сложная (4 балла)
@@ -266,7 +261,52 @@ fun convert(n: Int, base: Int): List<Int> = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+fun convertToString(n: Int, base: Int): String {
+    var num = n
+    var k: Any = 0
+    val list = mutableListOf<Any>()
+    while (num > 0) {
+        k = num % base
+        if (k > 9) {
+            k = when (k) {
+                10 -> "a"
+                11 -> "b"
+                12 -> "c"
+                13 -> "d"
+                14 -> "e"
+                15 -> "f"
+                16 -> "g"
+                17 -> "h"
+                18 -> "i"
+                19 -> "j"
+                20 -> "k"
+                21 -> "l"
+                22 -> "m"
+                23 -> "n"
+                24 -> "o"
+                25 -> "p"
+                26 -> "q"
+                27 -> "r"
+                28 -> "s"
+                29 -> "t"
+                30 -> "u"
+                31 -> "v"
+                32 -> "w"
+                33 -> "x"
+                34 -> "y"
+                35 -> "z"
+                else -> continue
+            }
+        }
+        list += k
+        num /= base
+    }
+    var result = ""
+    for (i in list.indices) {
+        result += list[i].toString()
+    }
+    return result.reversed()
+}
 
 /**
  * Средняя (3 балла)
@@ -275,7 +315,15 @@ fun convertToString(n: Int, base: Int): String = TODO()
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    var ten = 0.0
+    var pow = digits.size - 1
+    for (i in digits.indices) {
+        ten += digits[i] * base.toDouble().pow(pow)
+        pow -= 1
+    }
+    return ten.toInt()
+}
 
 /**
  * Сложная (4 балла)
@@ -289,7 +337,56 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    val list = str.toMutableList()
+    var num = 0.0
+    var pow = list.size - 1
+    for (i in list.indices) {
+        var m = list[i].toString()
+        m = when (m) {
+            "1" -> "1"
+            "2" -> "2"
+            "3" -> "3"
+            "4" -> "4"
+            "5" -> "5"
+            "6" -> "6"
+            "7" -> "7"
+            "8" -> "8"
+            "9" -> "9"
+            "0" -> "0"
+            "a" -> "10"
+            "b" -> "11"
+            "c" -> "12"
+            "d" -> "13"
+            "e" -> "14"
+            "f" -> "15"
+            "g" -> "16"
+            "h" -> "17"
+            "i" -> "18"
+            "j" -> "19"
+            "k" -> "20"
+            "l" -> "21"
+            "m" -> "22"
+            "n" -> "23"
+            "o" -> "24"
+            "p" -> "25"
+            "q" -> "26"
+            "r" -> "27"
+            "s" -> "28"
+            "t" -> "29"
+            "u" -> "30"
+            "v" -> "31"
+            "w" -> "32"
+            "x" -> "33"
+            "y" -> "34"
+            "z" -> "35"
+            else -> continue
+        }
+        num += m.toDouble() * base.toDouble().pow(pow)
+        pow -= 1
+    }
+    return num.toInt()
+}
 
 /**
  * Сложная (5 баллов)
@@ -308,4 +405,158 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    val list = n.toString().toList()
+    val thousand = "тысяч"
+    val result = mutableListOf<String>()
+    val listFirst = listOf("", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять", "десять")
+    val listSecond = listOf(
+        "", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
+        "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать"
+    )
+    val listThird = listOf(
+        "", "десять", "двадцать", "тридцать", "сорок", "пятьдесят",
+        "шестьдесят", "семьдесят", "восемьдесят", "девяносто"
+    )
+    val listForth = listOf(
+        "", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот"
+    )
+    if (list.size == 1) {
+        val first = list[0].toString().toInt()
+        result += listFirst[first]
+    }
+    if (list.size == 2) {
+        val first = list[0].toString().toInt()
+        val second = list[1].toString().toInt()
+        val a = list[0].toString() + list[1].toString()
+        if (a.toInt() in 11..19) {
+            result += listSecond[second]
+        } else {
+            result += listThird[first]
+            result += listFirst[second]
+        }
+    }
+    if (list.size == 3) {
+        val first = list[0].toString().toInt()
+        val second = list[1].toString().toInt()
+        val third = list[2].toString().toInt()
+        result += listForth[first]
+        val a = list[1].toString() + list[2].toString()
+        if (a.toInt() in 11..19) {
+            result += listSecond[third]
+        } else {
+            result += listThird[second]
+            result += listFirst[third]
+        }
+    }
+    if (list.size == 4) {
+        val first = list[0].toString().toInt()
+        val second = list[1].toString().toInt()
+        val third = list[2].toString().toInt()
+        val forth = list[3].toString().toInt()
+        if (list[0].toString().toInt() == 1) {
+            result += "одна " + thousand + "а"
+        }
+        if (list[0].toString().toInt() == 2) {
+            result += "две " + thousand + "и"
+        }
+        if (list[0].toString().toInt() in 3..4) {
+            result += listFirst[first] + " тысячи"
+        }
+        if (list[0].toString().toInt() !in 1..4) {
+            result += listFirst[first] + " тысяч"
+        }
+        result += listForth[second]
+        val a = list[2].toString() + list[3].toString()
+        if (a.toInt() in 11..19) {
+            result += listSecond[forth]
+        } else {
+            result += listThird[third]
+            result += listFirst[forth]
+        }
+    }
+    if (list.size == 5) {
+        val list = n.toString().toList()
+        val first = list[0].toString().toInt()
+        val second = list[1].toString().toInt()
+        val third = list[2].toString().toInt()
+        val forth = list[3].toString().toInt()
+        val fifth = list[4].toString().toInt()
+        val a = list[0].toString() + list[1].toString()
+        if (a.toInt() in 11..19) {
+            result += listSecond[second]
+            result += thousand
+        } else {
+            result += listThird[first]
+        }
+        if (a.toInt() !in 11..19 && list[1].toString().toInt() == 1) {
+            result += "одна"
+            result += thousand + "а"
+        }
+        if (a.toInt() !in 11..19 && list[1].toString().toInt() == 2) {
+            result += "две"
+            result += thousand + "и"
+        }
+        if (a.toInt() !in 11..19 && list[1].toString().toInt() in 3..4) {
+            result += listFirst[second]
+            result += thousand + "и"
+        }
+        if (a.toInt() !in 11..19 && list[1].toString().toInt() !in 1..4) {
+            result += listFirst[second]
+            result += thousand
+        }
+        result += listForth[third]
+        val b = list[3].toString() + list[4].toString()
+        if (b.toInt() in 11..19) {
+            result += listSecond[fifth]
+        }
+        result += listThird[forth]
+        result += listFirst[fifth]
+    }
+    if (list.size == 6) {
+        val first = list[0].toString().toInt()
+        val second = list[1].toString().toInt()
+        val third = list[2].toString().toInt()
+        val forth = list[3].toString().toInt()
+        val fifth = list[4].toString().toInt()
+        val sixth = list[5].toString().toInt()
+        result += listForth[first]
+        val a = list[1].toString() + list[2].toString()
+        if (a.toInt() in 11..19) {
+            result += listSecond[third]
+            result += thousand
+        } else {
+            result += listThird[second]
+        }
+        if (a.toInt() !in 11..19 && list[2].toString().toInt() == 1) {
+            result += "одна"
+            result += thousand + "а"
+        }
+        if (a.toInt() !in 11..19 && list[2].toString().toInt() == 2) {
+            result += "две"
+            result += thousand + "и"
+        }
+        if (a.toInt() !in 11..19 && list[2].toString().toInt() in 3..4) {
+            result += listFirst[third]
+            result += thousand + "и"
+        }
+        if (a.toInt() !in 11..19 && list[2].toString().toInt() !in 1..4) {
+            result += listFirst[third]
+            result += thousand
+        }
+        result += listForth[forth]
+        val b = list[4].toString() + list[5].toString()
+        if (b.toInt() in 11..19) {
+            result += listSecond[sixth]
+        }
+        result += listThird[fifth]
+        result += listFirst[sixth]
+    }
+    var answer = ""
+    for (i in result.indices) {
+        if (result[i] != "") {
+            answer += result[i] + " "
+        }
+    }
+    return answer.substring(0, answer.length - 1)
+}

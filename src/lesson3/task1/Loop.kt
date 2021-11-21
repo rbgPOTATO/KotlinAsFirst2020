@@ -90,7 +90,16 @@ fun digitNumber(n: Int): Int {
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int {
+    var f = 1
+    var pf = 1
+    for (i in 3..n) {
+        val nf = f
+        f += pf
+        pf = nf
+    }
+    return f
+}
 
 /**
  * Простая (2 балла)
@@ -163,7 +172,15 @@ fun collatzSteps(x: Int): Int {
  */
 fun lcm(m: Int, n: Int): Int {
     var k = 0
-    for (i in 1..n * m) {
+    if (n < m) {
+        for (i in m..n * m) {
+            if (i % n == 0 && i % m == 0) {
+                k = i
+                break
+            }
+        }
+        return k
+    } else for (i in n..n * m) {
         if (i % n == 0 && i % m == 0) {
             k = i
             break
@@ -180,9 +197,16 @@ fun lcm(m: Int, n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    for (i in 2..n + m) {
-        if (m % i == 0 && n % i == 0)
-            return false
+    if (n < m) {
+        for (i in 2..n) {
+            if (m % i == 0 && n % i == 0)
+                return false
+        }
+    } else {
+        for (i in 2..m) {
+            if (m % i == 0 && n % i == 0)
+                return false
+        }
     }
     return true
 }
@@ -231,7 +255,17 @@ fun isPalindrome(n: Int): Boolean {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var num = n
+    var digit = num % 10
+    while (num != 0) {
+        val prev = digit
+        digit = num % 10
+        num /= 10
+        if (prev != digit) return true
+    }
+    return false
+}
 
 /**
  * Средняя (4 балла)
@@ -242,17 +276,7 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
-fun sin(x: Double, eps: Double): Double {
-    var n = 2
-    var m = x
-    var s = x
-    while (abs(m) > eps) {
-        m = -m * x.pow(2) / n * (n + 1)
-        s += m
-        n += 2
-    }
-    return s
-}
+fun sin(x: Double, eps: Double): Double = TODO()
 
 /**
  * Средняя (4 балла)

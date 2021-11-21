@@ -2,7 +2,6 @@
 
 package lesson6.task1
 
-import java.lang.Exception
 import java.lang.NumberFormatException
 
 // Урок 6: разбор строк, исключения
@@ -78,46 +77,32 @@ fun main() {
  * входными данными.
  */
 fun dateStrToDigit(str: String): String {
-    // шаг 1: месяц -> номер месяца
-    // шаг 1.1: создать множество возможных месяцев
-    val setMonth = setOf(
-        "января",
-        "февраля",
-        "марта",
-        "апреля",
-        "мая",
-        "июня",
-        "июля",
-        "августа",
-        "сентября",
-        "октября",
-        "ноября",
-        "декабря"
+    val monthList = listOf(
+        "января", "февраля", "марта", "апреля", "мая", "июня", "июля",
+        "августа", "сентября", "октября", "ноября", "декабря"
     )
-    // шаг 1.2: присвоить каждому месяцу его номер
-    var num = 0
-    val map = mutableMapOf<String, Int>()
-    for (i in setMonth) {
-        num += 1
-        map += Pair(i, num)
+    var mouthNum = 0
+    val mouthMap = mutableMapOf<String, Int>()
+    for (i in monthList) {
+        mouthNum += 1
+        mouthMap += Pair(i, mouthNum)
     }
-    // шаг 1.3: разделить исходную строку на части
     val parts = str.split(" ").toMutableList()
-    // шаг 1.4: заменить название исходного месяца на его номер
-    parts[1] = map[parts[1]].toString()
-    // шаг 2: поставить ограничения для чисел соответственно месяцам
-    when (parts[1].toInt()) {
-        1 or 3 or 5 or 7 or 8 or 10 or 12 -> parts[0].toInt() < 32
-        4 or 6 or 9 or 11 -> parts[0].toInt() < 31
-        2 -> parts[0].toInt() < 30
-    }
-    // шаг 3: составить DD.MM.YYYY
+    if (parts.size != 3) return ""
+    if (parts[1] in mouthMap) {
+        parts[1] = mouthMap[parts[1]].toString()
+    } else return ""
+    val big = setOf(1, 3, 5, 7, 8, 10, 12)
+    val med = setOf(4, 6, 9, 11)
+    if (parts[1].toInt() in big && parts[0].toInt() > 31) return ""
+    if (parts[1].toInt() in med && parts[0].toInt() > 30) return ""
+    if (parts[1].toInt() == 2 && parts[0].toInt() > 28) return ""
     try {
-        val date = parts[0]
-        val month = parts[1]
-        val year = parts[2]
+        val date = parts[0].toInt()
+        val month = parts[1].toInt()
+        val year = parts[2].toInt()
         return String.format("%02d.%02d.%04d", date, month, year)
-    } catch (e: NumberFormatException) {
+    } catch (e: Exception) {
         return ""
     }
 }
@@ -132,7 +117,43 @@ fun dateStrToDigit(str: String): String {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val monthList = listOf(
+        "января", "февраля", "марта", "апреля", "мая", "июня", "июля",
+        "августа", "сентября", "октября", "ноября", "декабря"
+    )
+    var mouthNum = 0
+    val mouthMap = mutableMapOf<Int, String>()
+    for (i in monthList) {
+        mouthNum += 1
+        mouthMap += Pair(mouthNum, i)
+    }
+    val parts = digital.split(".").toMutableList()
+    if (parts.size != 3) return ""
+    val big = setOf(1, 3, 5, 7, 8, 10, 12)
+    val med = setOf(4, 6, 9, 11)
+    try {
+        mouthNum = parts[1].toInt()
+        val dayNum = parts[0].toInt()
+        val yearNum = parts[2].toInt()
+    } catch (e: NumberFormatException) {
+        return ""
+    }
+    if (mouthNum in big && parts[0].toInt() > 31) return ""
+    if (mouthNum in med && parts[0].toInt() > 30) return ""
+    if (mouthNum == 2 && parts[0].toInt() > 28) return ""
+    if (mouthNum in mouthMap) {
+        parts[1] = mouthMap[mouthNum].toString()
+    } else return ""
+    try {
+        val date = parts[0].toInt().toString()
+        val month = parts[1]
+        val year = parts[2]
+        return "$date $month $year"
+    } catch (e: Exception) {
+        return ""
+    }
+}
 
 /**
  * Средняя (4 балла)
