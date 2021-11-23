@@ -247,12 +247,7 @@ fun hasDifferentDigits(n: Int): Boolean {
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
 fun sin(x: Double, eps: Double): Double {
-    var k = x
-    var i = 0.0
-    while (k - 2.0 * PI * i >= 0.0) {
-        i += 1.0
-    }
-    k -= 2.0 * PI * i
+    val k = x % (2 * PI)
     var y = k
     var sum = k
     var m = 1.0
@@ -274,12 +269,7 @@ fun sin(x: Double, eps: Double): Double {
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double {
-    var k = x
-    var i = 0
-    while (k - 2 * PI * i >= 0) {
-        i += 1
-    }
-    k -= 2 * PI * i
+    val k = x % (2 * PI)
     var y = 1.0
     var sum = 1.0
     var m = 0.0
