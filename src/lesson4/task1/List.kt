@@ -242,6 +242,7 @@ fun convert(n: Int, base: Int): List<Int> {
     var num = n
     var k = 0
     val list = mutableListOf<Int>()
+    if (num == 0) list += num
     while (num > 0) {
         k = num % base
         list += k
@@ -265,6 +266,7 @@ fun convertToString(n: Int, base: Int): String {
     var num = n
     var k: Any = 0
     val list = mutableListOf<Any>()
+    if (num == 0) return num.toString()
     while (num > 0) {
         k = num % base
         if (k > 9) {
@@ -509,9 +511,10 @@ fun russian(n: Int): String {
         val b = list[3].toString() + list[4].toString()
         if (b.toInt() in 11..19) {
             result += listSecond[fifth]
+        } else {
+            result += listThird[forth]
+            result += listFirst[fifth]
         }
-        result += listThird[forth]
-        result += listFirst[fifth]
     }
     if (list.size == 6) {
         val first = list[0].toString().toInt()
@@ -548,9 +551,10 @@ fun russian(n: Int): String {
         val b = list[4].toString() + list[5].toString()
         if (b.toInt() in 11..19) {
             result += listSecond[sixth]
+        } else {
+            result += listThird[fifth]
+            result += listFirst[sixth]
         }
-        result += listThird[fifth]
-        result += listFirst[sixth]
     }
     var answer = ""
     for (i in result.indices) {

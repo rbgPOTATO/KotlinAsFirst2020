@@ -92,12 +92,12 @@ fun circleInside(
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    val squareHole = r * s
-    val squareAB = a * b
-    val squareBC = b * c
-    val squareAC = a * c
-    val first = squareAB <= squareHole
-    val second = squareBC <= squareHole
-    val third = squareAC <= squareHole
-    return first || second || third
+    val sqrHole = r * s
+    val sqrAB = a * b
+    val sqrBC = b * c
+    val sqrAC = a * c
+    if (sqrAB <= sqrHole && (a <= r || a <= s) && (b <= r || b <= s)) return true
+    if (sqrBC <= sqrHole && (b <= r || b <= s) && (c <= r || c <= s)) return true
+    if (sqrAC <= sqrHole && (c <= r || c <= s) && (a <= r || a <= s)) return true
+    return false
 }

@@ -89,6 +89,7 @@ fun dateStrToDigit(str: String): String {
     }
     val parts = str.split(" ").toMutableList()
     if (parts.size != 3) return ""
+    var yearNum = parts[2].toInt()
     if (parts[1] in mouthMap) {
         parts[1] = mouthMap[parts[1]].toString()
     } else return ""
@@ -96,12 +97,14 @@ fun dateStrToDigit(str: String): String {
     val med = setOf(4, 6, 9, 11)
     if (parts[1].toInt() in big && parts[0].toInt() > 31) return ""
     if (parts[1].toInt() in med && parts[0].toInt() > 30) return ""
-    if (parts[1].toInt() == 2 && parts[0].toInt() > 28) return ""
+    val isLeap = yearNum % 4 == 0 && yearNum % 100 != 0 || yearNum % 400 == 0
+    if (isLeap && parts[1].toInt() == 2 && parts[0].toInt() > 29) return ""
+    if (isLeap.not() && parts[1].toInt() == 2 && parts[0].toInt() > 28) return ""
     try {
         val date = parts[0].toInt()
         val month = parts[1].toInt()
         val year = parts[2].toInt()
-        return String.format("%02d.%02d.%04d", date, month, year)
+        return String.format("%02d.%02d.%d", date, month, year)
     } catch (e: Exception) {
         return ""
     }
@@ -123,6 +126,7 @@ fun dateDigitToStr(digital: String): String {
         "августа", "сентября", "октября", "ноября", "декабря"
     )
     var mouthNum = 0
+    var yearNum = 0
     val mouthMap = mutableMapOf<Int, String>()
     for (i in monthList) {
         mouthNum += 1
@@ -135,13 +139,15 @@ fun dateDigitToStr(digital: String): String {
     try {
         mouthNum = parts[1].toInt()
         val dayNum = parts[0].toInt()
-        val yearNum = parts[2].toInt()
+        yearNum = parts[2].toInt()
     } catch (e: NumberFormatException) {
         return ""
     }
     if (mouthNum in big && parts[0].toInt() > 31) return ""
     if (mouthNum in med && parts[0].toInt() > 30) return ""
-    if (mouthNum == 2 && parts[0].toInt() > 28) return ""
+    val isLeap = yearNum % 400 == 0 || yearNum % 4 == 0 && yearNum % 100 != 0
+    if (isLeap && mouthNum == 2 && parts[0].toInt() > 29) return ""
+    if (isLeap.not() && mouthNum == 2 && parts[0].toInt() > 28) return ""
     if (mouthNum in mouthMap) {
         parts[1] = mouthMap[mouthNum].toString()
     } else return ""
@@ -181,7 +187,28 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    try {
+        val list = jumps.split(" ")
+        list.isNotEmpty()
+    } catch (e: Exception) {
+        return -1
+    }
+    val list = jumps.split(" ")
+    var result = -1
+    for (i in list) {
+        if (i == "-" || i == "%") continue
+        try {
+            i.toInt()
+        } catch (e: NumberFormatException) {
+            return -1
+        }
+        if (i.toInt() > result) {
+            result = i.toInt()
+        }
+    }
+    return result
+}
 
 /**
  * Сложная (6 баллов)
@@ -194,7 +221,25 @@ fun bestLongJump(jumps: String): Int = TODO()
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    val list = jumps.split(" ")
+    try {
+        for (i in list.indices) {
+            if (i % 2 == 0) list[i].toInt()
+        }
+    } catch (e: NumberFormatException) {
+        return -1
+    }
+    val map = mutableMapOf<Int, String>()
+    for (i in list.indices) {
+        if (i % 2 == 0) map += (list[i].toInt() to list[i + 1])
+    }
+    var result = -1
+    for (j in map) {
+        if ("+" in j.value.split("")) result = j.key
+    }
+    return result
+}
 
 /**
  * Сложная (6 баллов)
@@ -205,7 +250,24 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    try {
+        val list = expression.split(" ")
+        list.size >= 3
+        for (i in list.indices) {
+            if (i % 2 == 0) list[i].toInt() > 0
+        }
+    } catch (e: IllegalArgumentException) {
+        throw e
+    }
+    val list = expression.split(" ")
+    var result = list[0].toInt()
+    for (i in list.indices) {
+        if (list[i] == "+") result += list[i + 1].toInt()
+        if (list[i] == "-") result -= list[i + 1].toInt()
+    }
+    return result
+}
 
 /**
  * Сложная (6 баллов)
@@ -229,7 +291,39 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше нуля либо равны нулю.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    try {
+        description.split("; ")
+    } catch (e: Exception) {
+        return ""
+    }
+    var list = description.split("; ")
+    val products = mutableMapOf<String, Double>()
+    for (i in list) {
+        try {
+            i.split(" ")
+        } catch (e: Exception) {
+            return ""
+        }
+        val listProducts = i.split(" ")
+        if (listProducts.size != 2) return ""
+        try {
+            listProducts[1].toDouble()
+        } catch (e: NumberFormatException) {
+            return ""
+        }
+        products += (listProducts[0] to listProducts[1].toDouble())
+    }
+    var maxValue = 0.0
+    var result = ""
+    for (j in products) {
+        if (j.value > maxValue) {
+            maxValue = j.value
+            result = j.key
+        }
+    }
+    return result
+}
 
 /**
  * Сложная (6 баллов)
