@@ -171,22 +171,14 @@ fun collatzSteps(x: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var k = 0
-    if (n < m) {
-        for (i in m..n * m) {
-            if (i % n == 0 && i % m == 0) {
-                k = i
-                break
-            }
-        }
-        return k
-    } else for (i in n..n * m) {
-        if (i % n == 0 && i % m == 0) {
-            k = i
-            break
-        }
+    var first = m
+    var second = n
+    while ((first != 0) && (second != 0)) {
+        if (first > second) first %= second
+        else second %= first
     }
-    return k
+    val gcd = first + second
+    return m * n / gcd
 }
 
 /**
@@ -197,18 +189,13 @@ fun lcm(m: Int, n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    if (n < m) {
-        for (i in 2..n) {
-            if (m % i == 0 && n % i == 0)
-                return false
-        }
-    } else {
-        for (i in 2..m) {
-            if (m % i == 0 && n % i == 0)
-                return false
-        }
+    var first = m
+    var second = n
+    while ((first != 0) && (second != 0)) {
+        if (first > second) first %= second
+        else second %= first
     }
-    return true
+    return first + second == 1
 }
 
 /**
