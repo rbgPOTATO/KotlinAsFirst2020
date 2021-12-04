@@ -133,15 +133,7 @@ fun abs(v: List<Double>): Double {
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double {
-    var sum = 0.0
-    var i = 0
-    for (element in list) {
-        sum += element
-        i++
-    }
-    return if (i != 0) sum / i else 0.0
-}
+fun mean(list: List<Double>): Double = if (list.isNotEmpty()) list.sum() / list.size else 0.0
 
 /**
  * Средняя (3 балла)
@@ -152,20 +144,14 @@ fun mean(list: List<Double>): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    var sum = 0.0
-    var i = 0
-    for (element in list) {
-        sum += element
-        i++
-    }
-    if (i == 0) {
-        return list
+    return if (list.isEmpty()) {
+        list
     } else {
-        sum /= i
+        val i = mean(list)
         for (j in 0 until list.size) {
-            list[j] -= sum
+            list[j] -= i
         }
-        return list
+        list
     }
 }
 
@@ -211,7 +197,7 @@ fun polynom(p: List<Int>, x: Int): Int {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    if (list.size != 0) {
+    if (list.isNotEmpty()) {
         var s = list[0]
         for (i in 1 until list.size) {
             s += list[i]
@@ -250,16 +236,7 @@ fun factorize(n: Int): List<Int> {
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
 fun factorizeToString(n: Int): String {
-    var i = 2
-    var m = n
-    val result = mutableListOf<Int>()
-    while (m > 1) {
-        while (m % i == 0) {
-            m /= i
-            result.add(i)
-        }
-        i++
-    }
+    val result = factorize(n)
     return result.joinToString(separator = "*")
 }
 
@@ -274,10 +251,10 @@ fun convert(n: Int, base: Int): List<Int> {
     val result = mutableListOf<Int>()
     var m = n
     while (m > 0) {
-        result.add(0, m % base)
+        result.add(m % base)
         m /= base
     }
-    return if (n == 0) listOf(0) else result
+    return if (n == 0) listOf(0) else result.reversed()
 }
 
 /**
@@ -299,13 +276,12 @@ fun convertToString(n: Int, base: Int): String {
     for (i in 'a'..'z') {
         letters.add(i.toString())
     }
+    val conv = convert(n, base)
     val result = mutableListOf<String>()
-    var m = n
-    while (m > 0) {
-        result.add(0, letters[m % base])
-        m /= base
+    for (i in conv.indices) {
+        result.add(if (conv[i] > 9) letters[conv[i]] else conv[i].toString())
     }
-return if (n == 0) "0" else result.joinToString(separator = "")
+    return if (n == 0) "0" else result.joinToString(separator = "")
 }
 
 /**
@@ -346,7 +322,7 @@ fun decimalFromString(str: String, base: Int): Int {
         s += number.indexOf(i.toString()) * base.toDouble().pow(str.length - j).toInt()
         j += 1
     }
-    return if (str == "0") 0 else s
+    return s
 }
 
 /**
@@ -358,30 +334,28 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
+    val chars = mutableMapOf(
+        1000 to "M",
+        900 to "CM",
+        500 to "D",
+        400 to "CD",
+        100 to "C",
+        90 to "XC",
+        50 to "L",
+        40 to "XL",
+        10 to "X",
+        9 to "IX",
+        5 to "V",
+        4 to "IV",
+        1 to "I"
+    )
     var m = n
-    val chars = mutableMapOf<Int, String>()
-    val sort = mutableListOf<Int>()
-    var result = ""
-    chars[1] = "I"
-    chars[4] = "IV"
-    chars[5] = "V"
-    chars[9] = "IX"
-    chars[10] = "X"
-    chars[40] = "XL"
-    chars[50] = "L"
-    chars[90] = "XC"
-    chars[100] = "C"
-    chars[400] = "CD"
-    chars[500] = "D"
-    chars[900] = "CM"
-    chars[1000] = "M"
-    for (i in chars.keys) {
-        sort.add(0, i)
-    }
-    for (i in sort) {
-        while (m / i > 0) {
-            m -= i
-            result += chars[i]
+    val result = buildString {
+        for (i in chars.keys) {
+            while (m / i > 0) {
+                m -= i
+                append(chars[i])
+            }
         }
     }
     return result
@@ -395,94 +369,60 @@ fun roman(n: Int): String {
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun russian(n: Int): String {
-    val firstSt = mutableListOf<String>()
-    val firstTh = mutableListOf<String>()
-    val second = mutableListOf<String>()
-    val third = mutableListOf<String>()
-    val tenToTwenty = mutableListOf<String>()
+    val tenToTwenty = listOf(
+        "десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать",
+        "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать"
+    )
+    val firstSt = listOf("", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+    val firstTh = listOf("", "одна", "две", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+    val second = listOf(
+        "", "десять", "двадцать", "тридцать", "сорок",
+        "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто"
+    )
+    val third = listOf(
+        "", "сто", "двести", "триста", "четыреста",
+        "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот"
+    )
     val number = mutableListOf<Int>()
     var m = n
     while (m > 0) {
-        number.add(0, m % 10)
+        number.add(m % 10)
         m /= 10
     }
-    while (number.size < 6) number.add(0, 0)
-    tenToTwenty.add("десять")
-    tenToTwenty.add("одиннадцать")
-    tenToTwenty.add("двенадцать")
-    tenToTwenty.add("тринадцать")
-    tenToTwenty.add("четырнадцать")
-    tenToTwenty.add("пятнадцать")
-    tenToTwenty.add("шестнадцать")
-    tenToTwenty.add("семнадцать")
-    tenToTwenty.add("восемнадцать")
-    tenToTwenty.add("девятнадцать")
-    firstSt.add("")
-    firstSt.add("один")
-    firstSt.add("два")
-    firstSt.add("три")
-    firstSt.add("четыре")
-    firstSt.add("пять")
-    firstSt.add("шесть")
-    firstSt.add("семь")
-    firstSt.add("восемь")
-    firstSt.add("девять")
-    firstTh.add("")
-    firstTh.add("одна")
-    firstTh.add("две")
-    firstTh.add("три")
-    firstTh.add("четыре")
-    firstTh.add("пять")
-    firstTh.add("шесть")
-    firstTh.add("семь")
-    firstTh.add("восемь")
-    firstTh.add("девять")
-    second.add("")
-    second.add("десять")
-    second.add("двадцать")
-    second.add("тридцать")
-    second.add("сорок")
-    second.add("пятьдесят")
-    second.add("шестьдесят")
-    second.add("семьдесят")
-    second.add("восемьдесят")
-    second.add("девяносто")
-    third.add("")
-    third.add("сто")
-    third.add("двести")
-    third.add("триста")
-    third.add("четыреста")
-    third.add("пятьсот")
-    third.add("шестьсот")
-    third.add("семьсот")
-    third.add("восемьсот")
-    third.add("девятьсот")
-    var s = ""
-    s += third[number[0]]
-    if (number[1] != 0 && s != "") s += " "
-    if (number[1] == 1) {
-        s += tenToTwenty[number[2]]
-        s += " тысяч"
-    } else {
-        s += second[number[1]]
-        if (number[2] != 0 && s != "") s += " "
-        s += firstTh[number[2]]
-        s += when {
-            number[0] == 0 && number[1] == 0 && number[2] == 0 -> ""
-            number[2] == 1 -> " тысяча"
-            number[2] in (2..4) -> " тысячи"
-            else -> " тысяч"
+    while (number.size < 6) number.add(0)
+    number.reverse()
+    val s = buildString {
+        append(third[number[0]])
+        if (number[1] != 0 && number[0] != 0) append(" ")
+        if (number[1] == 1) {
+            append(tenToTwenty[number[2]])
+            append(" тысяч")
+        } else {
+            append(second[number[1]])
+            if (number[2] != 0 && (number[1] != 0 || number[0] != 0)) append(" ")
+            append(firstTh[number[2]])
+            append(
+                when {
+                    number[0] == 0 && number[1] == 0 && number[2] == 0 -> ""
+                    number[2] == 1 -> " тысяча"
+                    number[2] in (2..4) -> " тысячи"
+                    else -> " тысяч"
+                }
+            )
         }
-    }
-    if (number[3] != 0 && s != "") s += " "
-    s += third[number[3]]
-    if (number[4] != 0 && s != "") s += " "
-    if (number[4] == 1) {
-        s += tenToTwenty[number[5]]
-    } else {
-        s += second[number[4]]
-        if (number[5] != 0 && s != "") s += " "
-        s += firstSt[number[5]]
+        if (number[3] != 0 && (number[0] != 0 || number[1] != 0 || number[2] != 0)) append(" ")
+        append(third[number[3]])
+        if (number[4] != 0 && (number[0] != 0 || number[1] != 0 || number[2] != 0 || number[3] != 0)) append(" ")
+        if (number[4] == 1) {
+            append(tenToTwenty[number[5]])
+        } else {
+            append(second[number[4]])
+            if (
+                number[5] != 0 && (number[0] != 0 || number[1] != 0 || number[2] != 0 ||
+                        number[3] != 0 || number[4] != 0)
+            ) append(" ")
+            append(firstSt[number[5]])
+        }
     }
     return s
 }
