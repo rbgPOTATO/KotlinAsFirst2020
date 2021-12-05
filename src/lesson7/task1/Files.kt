@@ -84,18 +84,7 @@ fun deleteMarked(inputName: String, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
-    val map = mutableMapOf<String, Int>()
-    for (str in substrings) {
-        var count = 0
-        for (line in File(inputName).readLines()) {
-            val split = line.lowercase().split(str.lowercase())
-            count += (split.size - 1)
-        }
-        map += (str to count)
-    }
-    return map
-}
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
 
 
 /**
@@ -113,8 +102,8 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  */
 fun sibilants(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
-    val sizz = listOf<Char>('ж', 'ч', 'ш', 'щ', 'Ж', 'Ч', 'Ш', 'Щ')
-    val vow = mapOf<Char, Char>('ы' to 'и', 'я' to 'а', 'ю' to 'у', 'Ы' to 'И', 'Я' to 'А', 'Ю' to 'У')
+    val sizz = listOf('ж', 'ч', 'ш', 'щ', 'Ж', 'Ч', 'Ш', 'Щ')
+    val vow = mapOf('ы' to 'и', 'я' to 'а', 'ю' to 'у', 'Ы' to 'И', 'Я' to 'А', 'Ю' to 'У')
     var i = 0
     for (line in File(inputName).readLines()) {
         var newLine = ""
@@ -156,21 +145,25 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    var maxStr = ""
-    for (max in File(inputName).readLines()) {
-        if (max.length > maxStr.length) maxStr = max
-    }
-    val writer = File(outputName).bufferedWriter()
+    val newInput = mutableListOf<String>()
     for (line in File(inputName).readLines()) {
         var newLine = line
-        if (line != "") {
+        if (newLine != "") {
             while (newLine.first() == ' ') newLine = newLine.substring(1)
             while (newLine.last() == ' ') newLine = newLine.substring(0, newLine.length - 1)
         }
-        val ind = (maxStr.length - newLine.length) / 2
+        newInput += newLine
+    }
+    var maxStr = ""
+    for (max in newInput) {
+        if (max.length > maxStr.length) maxStr = max
+    }
+    val writer = File(outputName).bufferedWriter()
+    for (line in newInput) {
+        val ind = (maxStr.length - line.length) / 2
         val void = " "
         for (i in 1..ind) writer.write(void)
-        writer.write(newLine)
+        writer.write(line)
         writer.newLine()
     }
     writer.close()
@@ -204,6 +197,52 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
+    /*val newInput = mutableListOf<String>()
+    for (line in File(inputName).readLines()) {
+        var newLine = line
+        var newestLine = ""
+        if (newLine != "") {
+            val newLineList = newLine.split(" ")
+            for (word in newLineList) {
+                if (word == " ") continue
+                newestLine += "$word "
+            }
+            newestLine = newestLine.substring(0, newestLine.length - 1)
+        }
+        newInput += newestLine
+    }
+    var maxStr = ""
+    for (max in newInput) {
+        if (max.length > maxStr.length) maxStr = max
+    }
+    val writer = File(outputName).bufferedWriter()
+    for (line in newInput) {
+        if ((line == "") || (line.length == maxStr.length)) {
+            writer.write(line)
+            writer.newLine()
+            continue
+        }
+        val spaceNum = line.split(" ").size - 1
+        val ind = (maxStr.length - line.length) / spaceNum
+        val void = " "
+        val newLine = line.split(" ")
+        var newestLine = ""
+        if (newLine.size == 1) {
+            writer.write(line)
+            writer.newLine()
+            continue
+        }
+        for (word in newLine) {
+            var wordVoid = ""
+            for (i in 1..ind) wordVoid += void
+            wordVoid += word
+            newestLine += wordVoid
+        }
+        writer.write(newestLine)
+        writer.newLine()
+    }
+    writer.close()
+     */
     TODO()
 }
 
@@ -265,14 +304,7 @@ fun top20Words(inputName: String): Map<String, Int> = TODO()
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
-    val writer = File(outputName).bufferedWriter()
-    for (i in File(inputName).readText()) {
-        if (i.lowercase() in dictionary.keys.toString() || i.uppercase() in dictionary.keys.toString()) {
-            writer.write(dictionary[i].toString())
-        }
-        writer.write(i.toString())
-    }
-    writer.close()
+    TODO()
 }
 
 /**

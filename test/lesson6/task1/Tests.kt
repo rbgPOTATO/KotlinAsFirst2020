@@ -43,6 +43,10 @@ class Tests {
         assertEquals("", dateStrToDigit("29 февраля 1993"))
         assertEquals("01.01.1", dateStrToDigit("01 января 1"))
         assertEquals("29.02.2020", dateStrToDigit("29 февраля 2020"))
+        assertEquals(
+            "",
+            dateStrToDigit("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa^@{ibyrrU]218nfUA\\\"{':l\\\\w-Rn]!Hhizr21k0:}j:X65.YNR{h @rAX4y|#PK]6Ota\\taBlA?,l`3k[~Z0PD)P^F_\\\"N[qHSW")
+        )
     }
 
     @Test
@@ -123,6 +127,9 @@ class Tests {
         assertEquals("", mostExpensive("Вино 255 Молоко 62.5"))
         assertEquals("", mostExpensive("Вино255; молоко 62.5"))
         assertEquals("", mostExpensive("2343 вино; молоко 14.6"))
+        assertEquals("Any good with price 0.0", mostExpensive("a 0"))
+        assertEquals("Any good with price 0.0", mostExpensive("a 0; b 0"))
+        assertEquals("Any good with price 2.0", mostExpensive("a 2; b 2"))
     }
 
     @Test

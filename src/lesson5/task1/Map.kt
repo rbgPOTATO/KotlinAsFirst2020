@@ -275,6 +275,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
             cheap = coast
             cheapStuff = name
         }
+        if (kind == "") cheapStuff = ""
     }
     return cheapStuff
 }

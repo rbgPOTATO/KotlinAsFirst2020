@@ -87,26 +87,27 @@ fun dateStrToDigit(str: String): String {
         mouthNum += 1
         mouthMap += Pair(i, mouthNum)
     }
-    val parts = str.split(" ").toMutableList()
-    if (parts.size != 3) return ""
-    var yearNum = parts[2].toInt()
-    if (parts[1] in mouthMap) {
-        parts[1] = mouthMap[parts[1]].toString()
-    } else return ""
-    val big = setOf(1, 3, 5, 7, 8, 10, 12)
-    val med = setOf(4, 6, 9, 11)
-    if (parts[1].toInt() in big && parts[0].toInt() > 31) return ""
-    if (parts[1].toInt() in med && parts[0].toInt() > 30) return ""
-    val isLeap = yearNum % 4 == 0 && yearNum % 100 != 0 || yearNum % 400 == 0
-    if (isLeap && parts[1].toInt() == 2 && parts[0].toInt() > 29) return ""
-    if (isLeap.not() && parts[1].toInt() == 2 && parts[0].toInt() > 28) return ""
-    try {
+    return try {
+        val parts = str.split(" ").toMutableList()
+        if (parts.size != 3) return ""
+        val yearNum = parts[2].toInt()
+        if (parts[1] in mouthMap) {
+            parts[1] = mouthMap[parts[1]].toString()
+        } else return ""
+        val big = setOf(1, 3, 5, 7, 8, 10, 12)
+        val med = setOf(4, 6, 9, 11)
+        if (parts[1].toInt() in big && parts[0].toInt() > 31) return ""
+        if (parts[1].toInt() in med && parts[0].toInt() > 30) return ""
+        val isLeap = yearNum % 4 == 0 && yearNum % 100 != 0 || yearNum % 400 == 0
+        if (isLeap && parts[1].toInt() == 2 && parts[0].toInt() > 29) return ""
+        if (isLeap.not() && parts[1].toInt() == 2 && parts[0].toInt() > 28) return ""
+
         val date = parts[0].toInt()
         val month = parts[1].toInt()
         val year = parts[2].toInt()
-        return String.format("%02d.%02d.%d", date, month, year)
+        String.format("%02d.%02d.%d", date, month, year)
     } catch (e: Exception) {
-        return ""
+        ""
     }
 }
 
@@ -250,24 +251,7 @@ fun bestHighJump(jumps: String): Int {
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int {
-    try {
-        val list = expression.split(" ")
-        list.size >= 3
-        for (i in list.indices) {
-            if (i % 2 == 0) list[i].toInt() > 0
-        }
-    } catch (e: IllegalArgumentException) {
-        throw e
-    }
-    val list = expression.split(" ")
-    var result = list[0].toInt()
-    for (i in list.indices) {
-        if (list[i] == "+") result += list[i + 1].toInt()
-        if (list[i] == "-") result -= list[i + 1].toInt()
-    }
-    return result
-}
+fun plusMinus(expression: String): Int = TODO()
 
 /**
  * Сложная (6 баллов)
@@ -317,6 +301,7 @@ fun mostExpensive(description: String): String {
     var maxValue = 0.0
     var result = ""
     for (j in products) {
+        if (j.value == maxValue) result = "Any good with price $maxValue"
         if (j.value > maxValue) {
             maxValue = j.value
             result = j.key
