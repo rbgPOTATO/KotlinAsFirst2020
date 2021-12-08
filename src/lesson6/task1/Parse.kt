@@ -79,19 +79,10 @@ fun main() {
  */
 fun dateStrToDigit(str: String): String {
     val parts = str.split(" ").toMutableList()
-    val month = mutableListOf<String>()
-    month.add("января")
-    month.add("февраля")
-    month.add("марта")
-    month.add("апреля")
-    month.add("мая")
-    month.add("июня")
-    month.add("июля")
-    month.add("августа")
-    month.add("сентября")
-    month.add("октября")
-    month.add("ноября")
-    month.add("декабря")
+    val month = mutableListOf<String>(
+        "января", "февраля", "марта", "апреля", "мая", "июня",
+        "июля", "августа", "сентября", "октября", "ноября", "декабря"
+    )
     val result = mutableListOf<Int>()
     return try {
         parts[1] = (month.indexOf(parts[1]) + 1).toString()
