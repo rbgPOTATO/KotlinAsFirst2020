@@ -85,15 +85,16 @@ fun dateStrToDigit(str: String): String {
     )
     val result = mutableListOf<Int>()
     return try {
+        if (parts.size != 3) throw NumberFormatException()
         parts[1] = (month.indexOf(parts[1]) + 1).toString()
         val x = daysInMonth(parts[1].toInt(), parts[2].toInt())
-        if (parts[1].toInt() <= 0 ||
+        if (parts[1].toInt() !in 1..12 ||
             parts[0].toInt() !in 1..x ||
             parts[2].toInt() <= 0
-        ) throw IndexOutOfBoundsException()
+        ) throw NumberFormatException()
         for (i in parts) result.add(i.toInt())
         String.format("%02d.%02d.%d", result[0], result[1], result[2])
-    } catch (e: IndexOutOfBoundsException) {
+    } catch (e: NumberFormatException) {
         ""
     }
 
@@ -123,15 +124,16 @@ fun dateDigitToStr(digital: String): String {
         "июля", "августа", "сентября", "октября", "ноября", "декабря"
     )
     return try {
+        if (parts.size != 3) throw NumberFormatException()
         val x = daysInMonth(parts[1].toInt(), parts[2].toInt())
         if (parts.count() != 3 ||
             parts[0].toInt() !in 1..x ||
             parts[2].toInt() <= 0 ||
             month[parts[1].toInt() - 1] == "-1"
         )
-            throw IndexOutOfBoundsException()
+            throw NumberFormatException()
         String.format("%s %s %s", parts[0], month[parts[1].toInt() - 1], parts[2])
-    } catch (e: IndexOutOfBoundsException) {
+    } catch (e: NumberFormatException) {
         ""
     }
 }
