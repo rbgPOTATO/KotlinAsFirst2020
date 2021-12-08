@@ -56,6 +56,7 @@ class Tests {
         assertEquals("", dateDigitToStr("ab.cd.ef"))
         assertEquals("", dateDigitToStr("32.09.2011"))
         assertEquals("", dateDigitToStr("29.02.1993"))
+        assertEquals("29 февраля 6828000", dateDigitToStr("29.02.6828000"))
     }
 
     @Test
@@ -86,6 +87,7 @@ class Tests {
     fun bestHighJump() {
         assertEquals(226, bestHighJump("226 +"))
         assertEquals(-1, bestHighJump("???"))
+        assertEquals(-1, bestHighJump("220 + 224 .. 228 %- 230 + 232 %%- 234 %"))
         assertEquals(230, bestHighJump("220 + 224 %+ 228 %- 230 + 232 %%- 234 %"))
     }
 

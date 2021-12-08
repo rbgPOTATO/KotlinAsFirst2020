@@ -79,7 +79,7 @@ fun main() {
  */
 fun dateStrToDigit(str: String): String {
     val parts = str.split(" ").toMutableList()
-    val month = mutableListOf<String>(
+    val month = mutableListOf(
         "января", "февраля", "марта", "апреля", "мая", "июня",
         "июля", "августа", "сентября", "октября", "ноября", "декабря"
     )
@@ -118,19 +118,10 @@ fun dateDigitToStr(digital: String): String {
     } catch (e: NumberFormatException) {
         return ""
     }
-    val month = mutableListOf<String>()
-    month.add("января")
-    month.add("февраля")
-    month.add("марта")
-    month.add("апреля")
-    month.add("мая")
-    month.add("июня")
-    month.add("июля")
-    month.add("августа")
-    month.add("сентября")
-    month.add("октября")
-    month.add("ноября")
-    month.add("декабря")
+    val month = mutableListOf(
+        "января", "февраля", "марта", "апреля", "мая", "июня",
+        "июля", "августа", "сентября", "октября", "ноября", "декабря"
+    )
     return try {
         val x = daysInMonth(parts[1].toInt(), parts[2].toInt())
         if (parts.count() != 3 ||
@@ -178,14 +169,12 @@ fun bestLongJump(jumps: String): Int {
     val m = Regex("""( )+""").replace(result, " ")
     val k = m.split(" ")
     val resultList = mutableListOf<Int>()
-    try {
+    return try {
         for (i in k) resultList.add(i.toInt())
-        var s = 0
-        for (i in resultList) if (i > s) s = i
-        return s
+        resultList.maxOrNull() ?: -1
     } catch (e: NumberFormatException) {
+        -1
     }
-    return -1
 }
 
 /**
@@ -203,18 +192,16 @@ fun bestHighJump(jumps: String): Int {
     var result = jumps
     result = result.replace("%", "")
     result = result.replace("-", "")
-    result = Regex("""[0-9]{3} (?![+\w])""").replace(result, "")
+    result = Regex("""[0-9]{3} (?![+])""").replace(result, "")
     result = result.replace(" ", "")
     val resultList = mutableListOf<Int>()
     val m = Regex("""[+]""").split(result)
-    try {
+    return try {
         for (i in m) if (i != "") resultList.add(i.toInt())
-        var s = 0
-        for (i in resultList) if (i > s) s = i
-        return s
+        resultList.maxOrNull() ?: -1
     } catch (e: NumberFormatException) {
+        -1
     }
-    return -1
 }
 
 /**
