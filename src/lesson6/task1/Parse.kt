@@ -129,7 +129,7 @@ fun dateDigitToStr(digital: String): String {
         if (parts.count() != 3 ||
             parts[0].toInt() !in 1..x ||
             parts[2].toInt() <= 0 ||
-            month[parts[1].toInt() - 1] == "-1"
+            parts[1].toInt() !in 1..12
         )
             throw NumberFormatException()
         String.format("%s %s %s", parts[0], month[parts[1].toInt() - 1], parts[2])
