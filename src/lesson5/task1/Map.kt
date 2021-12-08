@@ -99,7 +99,7 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val result = mutableMapOf<Int, List<String>>()
     for ((name, mark) in grades) {
-        result[mark] = result.getOrDefault(mark, listOf()) + name
+        result[mark] = result.getOrDefault(mark, mutableListOf()) + name
     }
     return result
 }
@@ -330,12 +330,15 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     var result = Pair(-1, -1)
-    for (i in 0 until list.count() - 1)
-        for (j in i + 1 until list.count()) {
-            if (list[i] + list[j] == number) {
-                result = Pair(i, j)
-            }
+    val help = mutableListOf<Int>()
+    for (i in list.indices) {
+        if (help.contains(number - list[i])) {
+            result = Pair(list.indexOf(number - list[i]), i)
+            break
+        } else {
+            help.add(list[i])
         }
+    }
     return result
 }
 
