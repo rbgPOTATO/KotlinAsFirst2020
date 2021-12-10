@@ -194,12 +194,12 @@ fun bestHighJump(jumps: String): Int {
     var result = jumps
     result = result.replace("%", "")
     result = result.replace("-", "")
-    result = Regex("""[0-9]{3} (?![+])""").replace(result, "")
+    result = Regex("""[0-9]{3}\s(?![+])""").replace(result, "")
     result = result.replace(" ", "")
     val resultList = mutableListOf<Int>()
     val m = Regex("""[+]""").split(result)
     return try {
-        for (i in m) if (i != "") resultList.add(i.toInt())
+        for (i in m) if (i != "" && i.toInt() < 1000) resultList.add(i.toInt())
         resultList.maxOrNull() ?: -1
     } catch (e: NumberFormatException) {
         -1
