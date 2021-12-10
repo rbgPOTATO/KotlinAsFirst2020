@@ -124,10 +124,7 @@ fun centerFile(inputName: String, outputName: String) {
     val w = File(inputName).readLines().toMutableList()
     val s = mutableListOf<Int>()
     val writer = File(outputName).bufferedWriter()
-    for (i in w.indices) {
-        w[i] = Regex("""\s+""").replace(w[i], " ")
-        w[i] = w[i].trim()
-    }
+    for (i in w.indices) w[i] = w[i].trim()
     for (i in w) s.add(i.length)
     val m = s.maxOrNull()
     for (i in w.indices) if (w[i].length != m) if (m != null)
