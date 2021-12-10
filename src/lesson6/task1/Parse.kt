@@ -199,7 +199,11 @@ fun bestHighJump(jumps: String): Int {
     val resultList = mutableListOf<Int>()
     val m = Regex("""[+]""").split(result)
     return try {
-        for (i in m) if (i != "" && (i.toInt() in 100..999)) resultList.add(i.toInt())
+        for (i in m)
+            if (i != "" && (i.toInt() in 100..999))
+                resultList.add(i.toInt())
+            else
+                throw NumberFormatException()
         resultList.maxOrNull() ?: -1
     } catch (e: NumberFormatException) {
         -1
