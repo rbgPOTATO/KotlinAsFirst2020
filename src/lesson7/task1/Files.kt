@@ -84,7 +84,20 @@ fun deleteMarked(inputName: String, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    val map = mutableMapOf<String, Int>()
+    for (str in substrings) {
+        var count = 0
+        val string = """\$str.*""".toRegex(RegexOption.IGNORE_CASE)
+        for (line in File(inputName).readLines()) {
+            for (char in line.indices) {
+                if (string.matches(line.substring(char))) count += 1
+            }
+        }
+        map += (str to count)
+    }
+    return map
+}
 
 
 /**
@@ -197,18 +210,9 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    /*val newInput = mutableListOf<String>()
+    val newInput = mutableListOf<String>()
     for (line in File(inputName).readLines()) {
-        var newLine = line
-        var newestLine = ""
-        if (newLine != "") {
-            val newLineList = newLine.split(" ")
-            for (word in newLineList) {
-                if (word == " ") continue
-                newestLine += "$word "
-            }
-            newestLine = newestLine.substring(0, newestLine.length - 1)
-        }
+        var newestLine = line.trim()
         newInput += newestLine
     }
     var maxStr = ""
@@ -222,28 +226,35 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             writer.newLine()
             continue
         }
-        val spaceNum = line.split(" ").size - 1
-        val ind = (maxStr.length - line.length) / spaceNum
-        val void = " "
-        val newLine = line.split(" ")
-        var newestLine = ""
-        if (newLine.size == 1) {
+        val space = """\s""".toRegex()
+        val spaceNum = line.split(space).size - 1
+        if (spaceNum == 0) {
             writer.write(line)
             writer.newLine()
             continue
         }
-        for (word in newLine) {
-            var wordVoid = ""
-            for (i in 1..ind) wordVoid += void
-            wordVoid += word
-            newestLine += wordVoid
+        val withoutSpace = line.length - spaceNum
+        val newSpaceNum = maxStr.length - withoutSpace
+        val sumSpace = newSpaceNum / spaceNum
+        val remains = newSpaceNum % spaceNum
+        var newSpace = ""
+        for (i in 0 until sumSpace) newSpace += " "
+        val remNewSpace = "$newSpace "
+        var newLine = ""
+        val list = line.split(space)
+        var k = 0
+        for (word in list) {
+            if (k < remains) {
+                newLine += word + remNewSpace
+                k += 1
+                continue
+            }
+            newLine += word + newSpace
         }
-        writer.write(newestLine)
+        writer.write(newLine.trim())
         writer.newLine()
     }
     writer.close()
-     */
-    TODO()
 }
 
 /**
