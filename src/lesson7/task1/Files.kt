@@ -226,7 +226,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             writer.newLine()
             continue
         }
-        val space = """\s""".toRegex()
+        val space = """\s+""".toRegex()
         val spaceNum = line.split(space).size - 1
         if (spaceNum == 0) {
             writer.write(line)
