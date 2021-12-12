@@ -285,7 +285,47 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var number = 1.0
+    var numSqrt = 1.0
+    var k = 1
+    var numDig = 1.0
+    while (k < n) {
+        numSqrt += 1
+        number = numSqrt.pow(2)
+        var reverseNum = 0
+        var num = number.toInt()
+        if (num % 10 != 0) {
+            while (num != 0) {
+                reverseNum = reverseNum * 10 + num % 10
+                num /= 10
+            }
+            while (reverseNum > 0) {
+                numDig = (reverseNum % 10).toDouble()
+                reverseNum /= 10
+                k += 1
+                if (k == n) break
+            }
+        } else {
+            var numOfDig = 0
+            while (num != 0) {
+                num /= 10
+                numOfDig += 1
+            }
+            k += numOfDig
+            if (k == n) numDig = 0.0
+            var newK = k
+            num = number.toInt()
+            while (num != 0) {
+                numDig = ((num / 10) % 10).toDouble()
+                num /= 10
+                newK -= 1
+                if (newK == n) break
+            }
+        }
+    }
+    return numDig.toInt()
+}
 
 /**
  * Сложная (5 баллов)
@@ -296,4 +336,28 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var f = 1
+    var pf = 1
+    var k = 2
+    var fDig = 0
+    if (n == 1 || n == 2) return 1
+    while (k < n) {
+        val nf = f
+        f += pf
+        pf = nf
+        var reverseF = 0
+        var num = f
+        while (num != 0) {
+            reverseF = reverseF * 10 + num % 10
+            num /= 10
+        }
+        while (reverseF > 0) {
+            fDig = reverseF % 10
+            reverseF /= 10
+            k += 1
+            if (k == n) break
+        }
+    }
+    return fDig
+}
