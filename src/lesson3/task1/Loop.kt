@@ -293,35 +293,23 @@ fun squareSequenceDigit(n: Int): Int {
     while (k < n) {
         numSqrt += 1
         number = numSqrt.pow(2)
-        var reverseNum = 0
         var num = number.toInt()
-        if (num % 10 != 0) {
-            while (num != 0) {
-                reverseNum = reverseNum * 10 + num % 10
-                num /= 10
-            }
-            while (reverseNum > 0) {
-                numDig = (reverseNum % 10).toDouble()
-                reverseNum /= 10
-                k += 1
-                if (k == n) break
-            }
-        } else {
-            var numOfDig = 0
-            while (num != 0) {
-                num /= 10
-                numOfDig += 1
-            }
-            k += numOfDig
-            if (k == n) numDig = 0.0
-            var newK = k
-            num = number.toInt()
-            while (num != 0) {
-                numDig = ((num / 10) % 10).toDouble()
-                num /= 10
-                newK -= 1
-                if (newK == n) break
-            }
+        var numOfDig = 0
+        while (num != 0) {
+            num /= 10
+            numOfDig += 1
+        }
+        k += numOfDig
+        num = number.toInt()
+        numDig = (num % 10).toDouble()
+        if (k == n) break
+        if (k < n) continue
+        var newK = k
+        while (num != 0) {
+            numDig = ((num / 10) % 10).toDouble()
+            num /= 10
+            newK -= 1
+            if (newK == n) break
         }
     }
     return numDig.toInt()
@@ -346,17 +334,23 @@ fun fibSequenceDigit(n: Int): Int {
         val nf = f
         f += pf
         pf = nf
-        var reverseF = 0
         var num = f
+        var fNumDig = 0
         while (num != 0) {
-            reverseF = reverseF * 10 + num % 10
             num /= 10
+            fNumDig += 1
         }
-        while (reverseF > 0) {
-            fDig = reverseF % 10
-            reverseF /= 10
-            k += 1
-            if (k == n) break
+        k += fNumDig
+        num = f
+        fDig = num % 10
+        if (k == n) break
+        if (k < n) continue
+        var newK = k
+        while (num != 0) {
+            fDig = (num / 10) % 10
+            num /= 10
+            newK -= 1
+            if (newK == n) break
         }
     }
     return fDig
