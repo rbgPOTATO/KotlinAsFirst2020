@@ -154,14 +154,36 @@ fun centerFile(inputName: String, outputName: String) {
  * 6) Число пробелов между более левой парой соседних слов должно быть больше или равно числу пробелов
  *    между более правой парой соседних слов.
  *
- * Следует учесть, что входной файл может содержать последовательности из нескольких пробелов  между слвоами. Такие
+ * Следует учесть, что входной файл может содержать последовательности из нескольких пробелов между словами. Такие
  * последовательности следует учитывать при выравнивании и при необходимости избавляться от лишних пробелов.
  * Из этого следуют следующие правила:
  * 7) В самой длинной строке каждая пара соседних слов должна быть отделена В ТОЧНОСТИ одним пробелом
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    val w = File(inputName).readLines().toMutableList()
+    val s = mutableListOf<Int>()
+    val writer = File(outputName).bufferedWriter()
+    for (i in w.indices) {
+        w[i] = w[i].trim()
+        w[i] = Regex("""\s+""").replace(w[i], " ")
+    }
+    for (i in w) s.add(i.length)
+    val m = s.maxOrNull()
+    for (i in w.indices) if (w[i].length != m && w[i] != "" && w[i].split(" ").size != 1) if (m != null) {
+        var difference = m - w[i].length
+        val bufer = w[i].split(" ").toMutableList()
+        var j = 0
+        while (difference != 0) {
+            if (j + 1 == bufer.size) j = 0
+            bufer[j] += " "
+            j++
+            difference--
+        }
+        w[i] = bufer.joinToString(separator = " ")
+    }
+    for (i in w) writer.write(i + "\n")
+    writer.close()
 }
 
 /**
