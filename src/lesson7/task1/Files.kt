@@ -488,6 +488,27 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    var resultLen = (lhv / rhv).toString().length
+    val writer = File(outputName).bufferedWriter()
+    val answer = mutableListOf(" $lhv | $rhv")
+    var lhvSt = lhv.toString()
+    var rhvSt = rhv.toString()
+    var i = 0
+    var bufer = ""
+    while (bufer.toInt() / rhv == 0) {
+        bufer += (lhv / (lhvSt.length - i) % 10).toString()
+        i++
+    }
+    val space = answer[0].length - (bufer.toInt() - bufer.toInt() % rhv).toString().length - 1 - rhvSt.length
+    answer.add("-" + (bufer.toInt() - bufer.toInt() % rhv).toString() + " ".repeat(space) + rhvSt)
+    answer.add("-".repeat(1 + (bufer.toInt() - bufer.toInt() % rhv).toString().length))
+    var buferSpace = 1
+    resultLen--
+    while (resultLen != 0) {
+        bufer = bufer.drop(1) + (lhv / (lhvSt.length - i) % 10).toString()
+
+        resultLen--
+    }
+
 }
 
