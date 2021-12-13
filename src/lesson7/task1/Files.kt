@@ -211,26 +211,28 @@ fun centerFile(inputName: String, outputName: String) {
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
     val newInput = mutableListOf<String>()
+    val space = """\s+""".toRegex()
+    val n = """\\n""".toRegex()
+    var nCheck = 0
     for (line in File(inputName).readLines()) {
-        var newestLine = line.trim()
-        newInput += newestLine.split("\\n")
+        var newestLine = line.trim().replace(space, " ")
+        newInput += newestLine.split(n)
+        if (newestLine.split(n).size > 1) nCheck += 1
     }
     var maxStr = ""
     for (max in newInput) {
         if (max.length > maxStr.length) maxStr = max
     }
     val writer = File(outputName).bufferedWriter()
+    val resultList = mutableListOf<String>()
     for (line in newInput) {
         if ((line == "") || (line.length == maxStr.length)) {
-            writer.write(line)
-            writer.newLine()
+            resultList += line
             continue
         }
-        val space = """\s+""".toRegex()
         val spaceNum = line.split(space).size - 1
         if (spaceNum == 0) {
-            writer.write(line)
-            writer.newLine()
+            resultList += line
             continue
         }
         val withoutSpace = line.length - spaceNum
@@ -251,8 +253,18 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             }
             newLine += word + newSpace
         }
-        writer.write(newLine.trim())
-        writer.newLine()
+        resultList += newLine.trim()
+    }
+    if (nCheck > 0) {
+        for (str in resultList) {
+            writer.write(str)
+            if (str != resultList.last()) writer.write("\\n")
+        }
+    } else {
+        for (str in resultList) {
+            writer.write(str)
+            writer.newLine()
+        }
     }
     writer.close()
 }
