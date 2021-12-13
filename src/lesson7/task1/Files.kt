@@ -626,6 +626,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         var hyphens = ""
         for (i in 0..deductLength) hyphens += "-"
         var zero = 0
+        val voidForZero = remainsStr.length - 2
         if (remainsStr.length > 2 && deduct == 0) {
             val bonusSpace = remainsStr.length - 2
             for (i in 0 until bonusSpace) {
@@ -646,7 +647,9 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             doneLength += 1
         }
         resultList += "$space-$deduct"
-        if (zero == 1) space = space.substring(0, space.length - 2)
+        if (zero == 1) {
+            space = space.substring(0, space.length - voidForZero)
+        }
         resultList += "$space$hyphens"
         for (i in 0 until numSpace) space += " "
         resultList += "$space$remainsStr"
