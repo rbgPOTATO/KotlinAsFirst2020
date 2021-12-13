@@ -213,7 +213,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     val newInput = mutableListOf<String>()
     for (line in File(inputName).readLines()) {
         var newestLine = line.trim()
-        newInput += newestLine
+        newInput += newestLine.split("\\n")
     }
     var maxStr = ""
     for (max in newInput) {
@@ -415,7 +415,17 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    /*val bold = """\*[2]\w+\*[2]""".toRegex()
+    val italic = """\*\w+\*""".toRegex()
+    val underline = """~[2]\w+~[2]""".toRegex()
+    val htmlBold = """<b>\w+</b>""".toRegex()
+    val htmlItalic = """<i>\w+</i>""".toRegex()
+    val htmlUnderline = """<u>\w+</u>""".toRegex()
+    val writer = File(outputName).bufferedWriter()
+    writer.write("<html><body>")
+    for (line in File(inputName).readLines()) {
+        val ne = line.replace(bold, htmlBold)
+    }*/ TODO()
 }
 
 /**
@@ -582,6 +592,54 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    val result = lhv / rhv
+    val resultStr = result.toString()
+    val resultLength = result.toString().length
+    val lhvStr = lhv.toString()
+    val lhvLength = lhvStr.length
+    val rhvStr = rhv.toString()
+    val rhvLength = rhvStr.length
+    val resultList = mutableListOf<String>()
+    resultList += " $lhv | $rhv"
+    var space = ""
+    val digLength = (resultStr.first().toString().toInt() * rhv).toString().length
+    var doneLength = digLength
+    var remains = lhvStr.substring(0, digLength).toInt()
+    var remainsStr = lhvStr.substring(0, digLength)
+    var spaceForResult = ""
+    val numSpaceForResult = " $lhv | ".length - (remainsStr.length + 1)
+    for (i in 0 until numSpaceForResult) spaceForResult += " "
+    for (digit in resultStr) {
+        val digitDig = digit.toString().toInt()
+        val deduct = digitDig * rhv
+        val deductStr = deduct.toString()
+        val deductLength = deductStr.length
+        val remDig = remains - deduct
+        if (deductStr.length == remainsStr.length && space.isNotEmpty()) space = space.substring(0, space.length - 1)
+        if (doneLength == lhvLength) {
+            remains = remDig
+            remainsStr = remains.toString()
+        }
+        if (doneLength < lhvLength) {
+            val drop = lhvStr[doneLength].toString()
+            remains = remDig * 10 + drop.toInt()
+            remainsStr = "$remDig$drop"
+            doneLength += 1
+        }
+        resultList += "$space-$deduct"
+        var hyphens = ""
+        for (i in 0..deductLength) hyphens += "-"
+        resultList += "$space$hyphens"
+        val numSpace = hyphens.length - remDig.toString().length
+        for (i in 0 until numSpace) space += " "
+        resultList += "$space$remainsStr"
+    }
+    resultList[1] += "$spaceForResult$result"
+    val writer = File(outputName).bufferedWriter()
+    for (str in resultList) {
+        writer.write(str)
+        writer.newLine()
+    }
+    writer.close()
 }
 
