@@ -275,7 +275,6 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
             cheap = coast
             cheapStuff = name
         }
-        if (kind == "") cheapStuff = ""
     }
     return cheapStuff
 }
@@ -291,8 +290,12 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val set = word.lowercase().toSet()
+    val newList = mutableListOf<Char>()
+    for (char in chars) {
+        newList += char.lowercaseChar()
+    }
     for (i in set) {
-        if (i !in chars) return false
+        if (i !in newList) return false
     }
     return true
 }

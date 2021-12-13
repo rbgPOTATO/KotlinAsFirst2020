@@ -131,6 +131,7 @@ class Tests {
         assertEquals("Any good with price 0.0", mostExpensive("a 0; b 0"))
         assertEquals("Any good with price 2.0", mostExpensive("a 2; b 2"))
         assertEquals("Any good with price 0.01", mostExpensive("a 0.01; d 0.01"))
+        assertEquals("Any good with price 0.0", mostExpensive("a 0"))
     }
 
     @Test

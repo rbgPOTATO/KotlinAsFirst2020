@@ -114,7 +114,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
-    val writer = File(outputName).bufferedWriter()
+/*  val writer = File(outputName).bufferedWriter()
     val sizz = listOf('ж', 'ч', 'ш', 'щ', 'Ж', 'Ч', 'Ш', 'Щ')
     val vow = mapOf('ы' to 'и', 'я' to 'а', 'ю' to 'у', 'Ы' to 'И', 'Я' to 'А', 'Ю' to 'У')
     var i = 0
@@ -137,7 +137,8 @@ fun sibilants(inputName: String, outputName: String) {
         writer.write(newLine)
         writer.newLine()
     }
-    writer.close()
+    writer.close() */
+    TODO()
 }
 
 /**
@@ -624,6 +625,12 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         remains = remainsStr.toInt()
         resultList[0] = resultList[0].trim()
         doneLength += 1
+    }
+    if (digFirst == 0 && lhvLength > 2) {
+        resultList[0] = resultList[0].trim()
+        remains = lhv
+        remainsStr = remains.toString()
+        doneLength = lhvStr.length
     }
     var spaceForResult = ""
     val numSpaceForResult = " $lhv | ".length - (remainsStr.length + 1)
