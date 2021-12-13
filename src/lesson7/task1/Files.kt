@@ -602,10 +602,17 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     val resultList = mutableListOf<String>()
     resultList += " $lhv | $rhv"
     var space = ""
-    val digLength = (resultStr.first().toString().toInt() * rhv).toString().length
+    val digFirst = resultStr.first().toString().toInt() * rhv
+    val digLength = digFirst.toString().length
     var doneLength = digLength
-    var remains = lhvStr.substring(0, digLength).toInt()
     var remainsStr = lhvStr.substring(0, digLength)
+    var remains = remainsStr.toInt()
+    if (remains < digFirst) {
+        remainsStr = lhvStr.substring(0, digLength + 1)
+        remains = remainsStr.toInt()
+        resultList[0] = resultList[0].trim()
+        doneLength += 1
+    }
     var spaceForResult = ""
     val numSpaceForResult = " $lhv | ".length - (remainsStr.length + 1)
     for (i in 0 until numSpaceForResult) spaceForResult += " "
