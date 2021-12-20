@@ -121,9 +121,13 @@ fun sibilants(inputName: String, outputName: String) {
 fun centerFile(inputName: String, outputName: String) {
     val w = File(inputName).readLines().map { it.trim() }.toMutableList()
     val writer = File(outputName).bufferedWriter()
-    val m = w.maxOf { it.length }
+    var m = 0
+    try {
+        m = w.maxOf { it.length }
+    } catch (_: NoSuchElementException) {
+    }
     for (i in w.indices) {
-        if (w[i].length != m) w[i] = " ".repeat(m - w[i].length)
+        if (w[i].length != m) w[i] = " ".repeat(m - w[i].length) + w[i]
         writer.write(w[i] + "\n")
     }
     writer.close()
@@ -160,7 +164,11 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     val w = File(inputName).readLines().map { it.trim() }.toMutableList()
     val writer = File(outputName).bufferedWriter()
     for (i in w.indices) w[i] = Regex("""\s+""").replace(w[i], " ")
-    val m = w.maxOf { it.length }
+    var m = 0
+    try {
+        m = w.maxOf { it.length }
+    } catch (_: NoSuchElementException) {
+    }
     for (i in w.indices) {
         if (w[i].length != m && w[i] != "" && w[i].split(" ").size != 1) {
             var splited = w[i].split(" ")
