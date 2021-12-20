@@ -66,11 +66,9 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
 fun deleteMarked(inputName: String, outputName: String) {
     val w = File(inputName).readLines()
     val writer = File(outputName).bufferedWriter()
-    val result = w.toMutableList()
-    for (i in 0 until w.count()) {
-        if (w[i].contains(Regex("""^_"""))) result.remove(w[i])
+    for (i in w) {
+        if (i.contains(Regex("""^_"""))) continue else writer.write(i + "\n")
     }
-    for (i in result) writer.write(i + "\n")
     writer.close()
 }
 
@@ -121,15 +119,13 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    val w = File(inputName).readLines().toMutableList()
-    val s = mutableListOf<Int>()
+    val w = File(inputName).readLines().map { it.trim() }.toMutableList()
     val writer = File(outputName).bufferedWriter()
-    for (i in w.indices) w[i] = w[i].trim()
-    for (i in w) s.add(i.length)
-    val m = s.maxOrNull()
-    for (i in w.indices) if (w[i].length != m) if (m != null)
-        for (j in 0 until (m - w[i].length) / 2) w[i] = " " + w[i]
-    for (i in w) writer.write(i + "\n")
+    val m = w.maxOf { it.length }
+    for (i in w.indices) {
+        if (w[i].length != m) w[i] = " ".repeat(m - w[i].length)
+        writer.write(w[i] + "\n")
+    }
     writer.close()
 }
 
@@ -161,28 +157,21 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    val w = File(inputName).readLines().toMutableList()
-    val s = mutableListOf<Int>()
+    val w = File(inputName).readLines().map { it.trim() }.toMutableList()
     val writer = File(outputName).bufferedWriter()
+    for (i in w.indices) w[i] = Regex("""\s+""").replace(w[i], " ")
+    val m = w.maxOf { it.length }
     for (i in w.indices) {
-        w[i] = w[i].trim()
-        w[i] = Regex("""\s+""").replace(w[i], " ")
-    }
-    for (i in w) s.add(i.length)
-    val m = s.maxOrNull()
-    for (i in w.indices) if (w[i].length != m && w[i] != "" && w[i].split(" ").size != 1) if (m != null) {
-        var difference = m - w[i].length
-        val bufer = w[i].split(" ").toMutableList()
-        var j = 0
-        while (difference != 0) {
-            if (j + 1 == bufer.size) j = 0
-            bufer[j] += " "
-            j++
-            difference--
+        if (w[i].length != m && w[i] != "" && w[i].split(" ").size != 1) {
+            var splited = w[i].split(" ")
+            val a = (m - w[i].length) / (splited.size - 1)
+            val b = (m - w[i].length) % (splited.size - 1)
+            splited = splited.map { it + " ".repeat(a) }.toMutableList()
+            for (j in 0 until b) splited[j] += " "
+            w[i] = splited.joinToString(" ").trim()
         }
-        w[i] = bufer.joinToString(separator = " ")
+        writer.write(w[i] + "\n")
     }
-    for (i in w) writer.write(i + "\n")
     writer.close()
 }
 
@@ -488,27 +477,6 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    var resultLen = (lhv / rhv).toString().length
-    val writer = File(outputName).bufferedWriter()
-    val answer = mutableListOf(" $lhv | $rhv")
-    var lhvSt = lhv.toString()
-    var rhvSt = rhv.toString()
-    var i = 0
-    var bufer = ""
-    while (bufer.toInt() / rhv == 0) {
-        bufer += (lhv / (lhvSt.length - i) % 10).toString()
-        i++
-    }
-    val space = answer[0].length - (bufer.toInt() - bufer.toInt() % rhv).toString().length - 1 - rhvSt.length
-    answer.add("-" + (bufer.toInt() - bufer.toInt() % rhv).toString() + " ".repeat(space) + rhvSt)
-    answer.add("-".repeat(1 + (bufer.toInt() - bufer.toInt() % rhv).toString().length))
-    var buferSpace = 1
-    resultLen--
-    while (resultLen != 0) {
-        bufer = bufer.drop(1) + (lhv / (lhvSt.length - i) % 10).toString()
-
-        resultLen--
-    }
-
+    TODO()
 }
 

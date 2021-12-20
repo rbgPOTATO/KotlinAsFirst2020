@@ -2,6 +2,7 @@
 
 package lesson5.task1
 
+import ru.spbstu.wheels.sorted
 import java.lang.IllegalArgumentException
 
 // Урок 5: ассоциативные массивы и множества
@@ -331,14 +332,13 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     var result = Pair(-1, -1)
-    val help = mutableListOf<Int>()
+    val help = mutableMapOf<Int, Int>()
     for (i in list.indices) {
-        if (help.contains(number - list[i])) {
-            result = Pair(list.indexOf(number - list[i]), i)
+        if (help[number - list[i]] != null) {
+            result = Pair(i, help[number - list[i]] ?: -1).sorted()
             break
-        } else {
-            help.add(list[i])
         }
+        if (list[i] <= number) help[list[i]] = i
     }
     return result
 }

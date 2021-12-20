@@ -78,22 +78,24 @@ fun main() {
  * входными данными.
  */
 fun dateStrToDigit(str: String): String {
-    val parts = str.split(" ").toMutableList()
     val month = mutableListOf(
         "января", "февраля", "марта", "апреля", "мая", "июня",
         "июля", "августа", "сентября", "октября", "ноября", "декабря"
     )
-    val result = mutableListOf<Int>()
     return try {
-        if (parts.size != 3) throw NumberFormatException()
-        parts[1] = (month.indexOf(parts[1]) + 1).toString()
-        val x = daysInMonth(parts[1].toInt(), parts[2].toInt())
-        if (parts[1].toInt() !in 1..12 ||
-            parts[0].toInt() !in 1..x ||
-            parts[2].toInt() <= 0
-        ) throw NumberFormatException()
-        for (i in parts) result.add(i.toInt())
-        String.format("%02d.%02d.%d", result[0], result[1], result[2])
+        val parts = str.split(" ").toMutableList()
+        if (parts.size != 3) {
+            ""
+        } else {
+            parts[1] = (month.indexOf(parts[1]) + 1).toString()
+            val partsInt = parts.map { it.toInt() }
+            val x = daysInMonth(partsInt[1], partsInt[2])
+            if (partsInt[0] !in 1..x ||
+                partsInt[1] !in 1..12 ||
+                partsInt[2] <= 0
+            ) throw NumberFormatException()
+            String.format("%02d.%02d.%d", partsInt[0], partsInt[1], partsInt[2])
+        }
     } catch (e: NumberFormatException) {
         ""
     }
@@ -111,28 +113,24 @@ fun dateStrToDigit(str: String): String {
  * входными данными.
  */
 fun dateDigitToStr(digital: String): String {
-    val parts = digital.split(".").toMutableList()
-    try {
-        for (i in 0 until parts.count()) {
-            parts[i] = parts[i].toInt().toString()
-        }
-    } catch (e: NumberFormatException) {
-        return ""
-    }
     val month = mutableListOf(
         "января", "февраля", "марта", "апреля", "мая", "июня",
         "июля", "августа", "сентября", "октября", "ноября", "декабря"
     )
     return try {
-        if (parts.size != 3) throw NumberFormatException()
-        val x = daysInMonth(parts[1].toInt(), parts[2].toInt())
-        if (parts.count() != 3 ||
-            parts[0].toInt() !in 1..x ||
-            parts[2].toInt() <= 0 ||
-            parts[1].toInt() !in 1..12
-        )
-            throw NumberFormatException()
-        String.format("%s %s %s", parts[0], month[parts[1].toInt() - 1], parts[2])
+        val parts = digital.split(".").toMutableList().map { it.toInt() }
+        if (parts.size != 3) {
+            ""
+        } else {
+            val x = daysInMonth(parts[1], parts[2])
+            if (parts.size != 3 ||
+                parts[0] !in 1..x ||
+                parts[1] !in 1..12 ||
+                parts[2] <= 0
+            )
+                throw NumberFormatException()
+            String.format("%s %s %s", parts[0], month[parts[1] - 1], parts[2])
+        }
     } catch (e: NumberFormatException) {
         ""
     }
@@ -160,20 +158,16 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Результаты спортсмена на соревнованиях в прыжках в длину представлены строкой вида
  * "706 - % 717 % 703".
  * В строке могут присутствовать числа, черточки - и знаки процента %, разделённые пробелами;
- * число соответствует удачному прыжку, - пропущенной попытке, % заступу.
+ * число соответствует удачному прыжку,- пропущенной попытке, % заступу.
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int {
-    var result = jumps
-    result = result.replace("-", "")
-    result = result.replace("%", "")
-    val m = Regex("""( )+""").replace(result, " ")
-    val k = m.split(" ")
-    val resultList = mutableListOf<Int>()
+    var result = Regex("""[-%]""").replace(jumps, "")
+    result = Regex("""\s+""").replace(result, " ")
+    val k = result.split(" ")
     return try {
-        for (i in k) resultList.add(i.toInt())
-        resultList.maxOrNull() ?: -1
+        k.maxOfOrNull { it.toInt() } ?: -1
     } catch (e: NumberFormatException) {
         -1
     }
@@ -191,22 +185,17 @@ fun bestLongJump(jumps: String): Int {
  * вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
-    var result = jumps
-    result = result.replace("%", "")
-    result = result.replace("-", "")
-    result = Regex("""[0-9]{3}\s(?![+])""").replace(result, "")
-    result = result.replace(" ", "")
-    val resultList = mutableListOf<Int>()
-    val m = Regex("""[+]""").split(result)
-    return try {
-        for (i in m) {
-            if (i != "") {
-                if (i.toInt() !in 100..999) throw NumberFormatException()
-                resultList.add(i.toInt())
-            }
+    return if (jumps.matches(Regex("""([0-9]+ [-+%]+ )*[0-9]+ [-+%]+""")) && jumps.contains("+")) {
+        var result = Regex("""[-%]""").replace(jumps, "")
+        result = Regex("""[0-9]+ (?![+])""").replace(result, "")
+        result = Regex("""\s*[+]\s*""").replace(result, " ").trim()
+        val k = result.split(" ")
+        try {
+            k.maxOfOrNull { it.toInt() } ?: -1
+        } catch (e: NumberFormatException) {
+            -1
         }
-        resultList.maxOrNull() ?: -1
-    } catch (e: NumberFormatException) {
+    } else {
         -1
     }
 }

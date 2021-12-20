@@ -344,7 +344,7 @@ class Tests {
     }
 
     @Test
-    @Tag("6")
+    @Tag("0")
     fun finalTest() {
         assertEquals(
             listOf("Петров Иван", "Николай Игошин"),
