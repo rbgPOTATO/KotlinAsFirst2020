@@ -127,7 +127,7 @@ fun centerFile(inputName: String, outputName: String) {
     } catch (_: NoSuchElementException) {
     }
     for (i in w.indices) {
-        if (w[i].length != m) w[i] = " ".repeat(m - w[i].length) + w[i]
+        if (w[i].length != m) w[i] = " ".repeat((m - w[i].length) / 2) + w[i]
         writer.write(w[i] + "\n")
     }
     writer.close()
