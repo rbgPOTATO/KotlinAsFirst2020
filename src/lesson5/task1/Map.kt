@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import java.lang.IllegalArgumentException
+
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -97,9 +99,9 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    val result = mutableMapOf<Int, List<String>>()
+    val result = mutableMapOf<Int, MutableList<String>>()
     for ((name, mark) in grades) {
-        result[mark] = result.getOrDefault(mark, mutableListOf()) + name
+        result[mark]?.add(name) ?: result.put(mark, mutableListOf(name))
     }
     return result
 }
@@ -231,10 +233,8 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    var a = chars.toString().lowercase()
-    a = a.removeRange(0, 1)
-    a = a.removeRange(a.length - 1, a.length)
-    return a.toSet().containsAll(word.lowercase().toSet())
+    chars.map { it.lowercaseChar() }
+    return chars.toSet().containsAll(word.lowercase().toSet())
 }
 
 /**
@@ -271,12 +271,9 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    for (i in 0 until words.count() - 1)
-        for (j in i + 1 until words.count())
-            if (words[i].length == words[j].length) {
-                if (words[i].toSet().intersect(words[j].toSet()) == words[i].toSet()) return true
-            }
-    return false
+    val result = mutableSetOf<List<Char>>()
+    for (i in words.indices) result.add(words[i].toList().sorted())
+    return result.size != words.size
 }
 
 /**
@@ -368,3 +365,27 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+
+
+fun finalTest(examResults: List<String>, humSubjects: List<String>): List<String> {
+    val result = mutableListOf<String>()
+    for (i in examResults.indices) if (examResults[i].matches(Regex("""[а-яА-Я]+ [а-яА-Я]+\s+-\s+([а-яА-Я]+\s+[2-5], )*([а-яА-Я]+\s+[2-5])"""))) {
+        val bufer = examResults[i].split(Regex("""\s+-\s+"""))
+        val name = bufer[0]
+        val subjects = bufer[1].split(", ")
+        var countForHum = 0
+        for (j in subjects) {
+            val help = j.split(Regex("""\s+"""))
+            val grade = help[1].toInt()
+            val item = help[0]
+            when {
+                countForHum == 2 -> break
+                grade == 2 -> countForHum = 2
+                grade == 3 && item in humSubjects -> countForHum++
+                grade == 3 -> countForHum = 2
+            }
+        }
+        if (countForHum != 2) result.add(name)
+    } else throw IllegalArgumentException()
+    return result
+}
