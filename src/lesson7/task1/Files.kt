@@ -2,7 +2,6 @@
 
 package lesson7.task1
 
-import ru.spbstu.wheels.toIntArray
 import java.io.File
 
 // Урок 7: работа с файлами
@@ -126,10 +125,9 @@ fun centerFile(inputName: String, outputName: String) {
         m = w.maxOf { it.length }
     } catch (_: NoSuchElementException) {
     }
-    for (i in w.indices) {
-        if (w[i].length != m) w[i] = " ".repeat((m - w[i].length) / 2) + w[i]
-        writer.write(w[i] + "\n")
-    }
+    for (i in w.indices) writer.write(
+        if (w[i].length != m) " ".repeat((m - w[i].length) / 2) + w[i] + "\n" else w[i] + "\n"
+    )
     writer.close()
 }
 
@@ -176,9 +174,9 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             val b = (m - w[i].length) % (splited.size - 1)
             splited = splited.map { it + " ".repeat(a) }.toMutableList()
             for (j in 0 until b) splited[j] += " "
-            w[i] = splited.joinToString(" ").trim()
+            writer.write(splited.joinToString(" ").trim() + "\n")
         }
-        writer.write(w[i] + "\n")
+
     }
     writer.close()
 }

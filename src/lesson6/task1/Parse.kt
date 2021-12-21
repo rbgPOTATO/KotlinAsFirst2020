@@ -123,8 +123,7 @@ fun dateDigitToStr(digital: String): String {
             ""
         } else {
             val x = daysInMonth(parts[1], parts[2])
-            if (parts.size != 3 ||
-                parts[0] !in 1..x ||
+            if (parts[0] !in 1..x ||
                 parts[1] !in 1..12 ||
                 parts[2] <= 0
             )
