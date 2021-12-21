@@ -174,9 +174,9 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             val b = (m - w[i].length) % (splited.size - 1)
             splited = splited.map { it + " ".repeat(a) }.toMutableList()
             for (j in 0 until b) splited[j] += " "
-            writer.write(splited.joinToString(" ").trim() + "\n")
+            w[i] = splited.joinToString(" ").trim()
         }
-
+        writer.write(w[i] + "\n")
     }
     writer.close()
 }
