@@ -158,7 +158,17 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    val a2 = a * a
+    val b2 = b * b
+    val c2 = c * c
+    return when {
+        a > b + c || b > a + c || c > a + b -> -1
+        a2 + b2 == c2 || a2 + c2 == b2 || b2 + c2 == a2 -> 1
+        a2 + b2 <= c2 || a2 + c2 <= b2 || b2 + c2 <= a2 -> 2
+        else -> 0
+    }
+}
 
 /**
  * Средняя (3 балла)

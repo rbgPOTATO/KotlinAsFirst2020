@@ -2,6 +2,9 @@
 
 package lesson5.task1
 
+import ru.spbstu.wheels.sorted
+import java.lang.IllegalArgumentException
+
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -441,3 +444,27 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+
+
+fun finalTest(examResults: List<String>, humSubjects: List<String>): List<String> {
+    val result = mutableListOf<String>()
+    for (i in examResults.indices) if (examResults[i].matches(Regex("""[а-яА-Я]+ [а-яА-Я]+\s+-\s+([а-яА-Я]+\s+[2-5], )*([а-яА-Я]+\s+[2-5])"""))) {
+        val bufer = examResults[i].split(Regex("""\s+-\s+"""))
+        val name = bufer[0]
+        val subjects = bufer[1].split(", ")
+        var countForHum = 0
+        for (j in subjects) {
+            val help = j.split(Regex("""\s+"""))
+            val grade = help[1].toInt()
+            val item = help[0]
+            when {
+                countForHum == 2 -> break
+                grade == 2 -> countForHum = 2
+                grade == 3 && item in humSubjects -> countForHum++
+                grade == 3 -> countForHum = 2
+            }
+        }
+        if (countForHum != 2) result.add(name)
+    } else throw IllegalArgumentException()
+    return result
+}

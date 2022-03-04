@@ -263,7 +263,18 @@ fun hasDifferentDigits(n: Int): Boolean {
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
-fun sin(x: Double, eps: Double): Double = TODO()
+fun sin(x: Double, eps: Double): Double {
+    val k = x % (2 * PI)
+    var y = k
+    var sum = k
+    var m = 1.0
+    while (abs(y) >= eps) {
+        y *= -1.0 * k * k / ((m + 1.0) * (m + 2.0))
+        sum += y
+        m += 2.0
+    }
+    return sum
+}
 
 /**
  * Средняя (4 балла)
@@ -274,7 +285,18 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double {
+    val k = x % (2 * PI)
+    var y = 1.0
+    var sum = 1.0
+    var m = 0.0
+    while (abs(y) >= eps) {
+        y *= -1.0 * k * k / ((m + 1.0) * (m + 2.0))
+        sum += y
+        m += 2.0
+    }
+    return sum
+}
 
 /**
  * Сложная (4 балла)

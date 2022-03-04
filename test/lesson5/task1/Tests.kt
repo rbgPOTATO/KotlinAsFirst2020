@@ -116,6 +116,11 @@ class Tests {
             buildGrades(mapOf("Марат" to 3, "Семён" to 3, "Михаил" to 3))
                 .mapValues { (_, v) -> v.sorted() }
         )
+        assertEquals(
+            mapOf(0 to listOf("")),
+            buildGrades(mapOf("" to 0))
+                .mapValues { (_, v) -> v.sorted() }
+        )
     }
 
     @Test
@@ -353,5 +358,30 @@ class Tests {
                 450
             )
         )
+    }
+
+    @Test
+    @Tag("0")
+    fun finalTest() {
+        assertEquals(
+            listOf("Петров Иван", "Николай Игошин"),
+            finalTest(
+                listOf(
+                    "Петров Иван - Математика 5, Физика 4, Химия 5",
+                    "Николай Игошин - Математика 5, Физика 4, Химия 3",
+                    "Анастасия Романова - Математика 3, Физика 4, Химия 5",
+                    "Сергей Спирин - Математика 5, Физика 4, Химия 3, Русский 3"
+                ), listOf("Химия", "Русский")
+            )
+        )
+        assertEquals(
+            listOf("Петров Иван"),
+            finalTest(
+                listOf(
+                    "Петров Иван - Математика 5, Физика   4, Химия 5"
+                ), listOf("Химия", "Русский")
+            )
+        )
+        assertThrows(IllegalArgumentException::class.java) { finalTest(listOf("asd"), listOf()) }
     }
 }
